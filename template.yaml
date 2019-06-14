@@ -26,7 +26,9 @@ Resources:
             Method: GET
       Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
         Variables:
-          BUCKET_NAME: "BUCKET_NAME env var is empty"
+          IMAGE_BUCKET_NAME: "IMAGE_BUCKET_NAME env var is empty"
+          FILE_BUCKET_NAME: "FILE_BUCKET_NAME env var is empty"
+          BUCKET_REGION: "BUCKET_REGION env var is empty"
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
