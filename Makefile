@@ -1,4 +1,7 @@
-.PHONY: clean build
+.PHONY: deps clean build
+
+deps:
+	go get -u ./...
 
 clean: 
 	rm -rf ./bin/getAllBreeds
