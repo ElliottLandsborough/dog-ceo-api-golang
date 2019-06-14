@@ -1,10 +1,7 @@
-.PHONY: deps clean build
-
-deps:
-	go get -u ./...
+.PHONY: clean build
 
 clean: 
-	rm -rf ./hello-world/hello-world
+	rm -rf ./bin/getAllBreeds
 	
 build:
-	GOOS=linux GOARCH=amd64 go build -o hello-world/hello-world ./hello-world
+	GOOS=linux GOARCH=amd64 go build -o bin/getAllBreeds ./getAllBreeds
