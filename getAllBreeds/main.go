@@ -13,6 +13,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws/awserr"
     "github.com/aws/aws-sdk-go/aws/session"
     "github.com/aws/aws-sdk-go/service/s3"
+
+    breedUtil "../breedUtil"
 )
 
 func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
@@ -70,7 +72,7 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	resultJson, _ := json.Marshal(result)
 
-	fmt.Println(resultJson)
+	breedUtil.Demo()
 
 	return events.APIGatewayProxyResponse{
 		Body:       string(resultJson),
