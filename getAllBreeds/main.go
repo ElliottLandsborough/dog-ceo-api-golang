@@ -35,7 +35,7 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	*/
 
 	return events.APIGatewayProxyResponse{
-		Body:       fmt.Sprintf("%v", os.Getenv("BUCKET")),
+		Body:       fmt.Sprintf("%v", os.Getenv("BUCKET_NAME")),
 		StatusCode: 200,
 	}, nil
 	/*
