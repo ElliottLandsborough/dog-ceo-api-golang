@@ -5,6 +5,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -75,6 +76,7 @@ func ListAllBreeds() map[string][]string {
 
 	// loop through aws result
 	for _, c := range response.CommonPrefixes {
+		// remove the trailing slash
 		breed := strings.TrimRight(*c.Prefix, "/")
 
 		// explode by -
@@ -90,7 +92,7 @@ func ListAllBreeds() map[string][]string {
 			twoDimensionalArray[master] = []string{}
 		}
 
-		// sub breed exists
+		// sub breed exists?
 		if len(exploded) > 1 {
 			// sub will always be 1
 			sub := exploded[1]
@@ -122,6 +124,7 @@ func ListBreeds() []string {
 
 	// loop through aws result
 	for _, c := range response.CommonPrefixes {
+		// remove the trailing slash
 		breed := strings.TrimRight(*c.Prefix, "/")
 
 		// explode by -
@@ -130,6 +133,43 @@ func ListBreeds() []string {
 		if !Contains(breedArray, exploded[0]) {
 			// append to breeds array
 			breedArray = append(breedArray, exploded[0])
+		}
+	}
+
+	return breedArray
+}
+
+// ListSubBreeds gets all sub breeds by master breed name
+func ListSubBreeds(request events.APIGatewayProxyRequest) []string {
+	response := GetBreedPrefixesFromS3()
+
+	// create map of string arrays
+	breedArray := []string{}
+
+	// the breed from the {breed} section of url
+	breedRequested := request.PathParameters["breed"]
+
+	// loop through aws result
+	for _, c := range response.CommonPrefixes {
+		// remove the trailing slash
+		breed := strings.TrimRight(*c.Prefix, "/")
+
+		// explode by -
+		exploded := strings.Split(breed, "-")
+
+		// primary breed will always be there
+		primary := exploded[0]
+
+		// does the url segment match this item?
+		if breedRequested == primary {
+			// sub breed exists?
+			if len(exploded) > 1 {
+				// sub will always be 1
+				sub := exploded[1]
+
+				// append item to slice
+				breedArray = append(breedArray, sub)
+			}
 		}
 	}
 

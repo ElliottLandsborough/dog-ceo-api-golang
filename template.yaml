@@ -47,6 +47,24 @@ Resources:
           IMAGE_BUCKET_NAME: "IMAGE_BUCKET_NAME env var is empty"
           FILE_BUCKET_NAME: "FILE_BUCKET_NAME env var is empty"
           BUCKET_REGION: "BUCKET_REGION env var is empty"
+  listSubBreeds:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: bin/
+      Handler: listSubBreeds
+      Runtime: go1.x
+      Tracing: Active # https://docs.aws.amazon.com/lambda/latest/dg/lambda-x-ray.html
+      Events:
+        CatchAll:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /breeds/{breed}/list
+            Method: GET
+      Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
+        Variables:
+          IMAGE_BUCKET_NAME: "IMAGE_BUCKET_NAME env var is empty"
+          FILE_BUCKET_NAME: "FILE_BUCKET_NAME env var is empty"
+          BUCKET_REGION: "BUCKET_REGION env var is empty"
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function

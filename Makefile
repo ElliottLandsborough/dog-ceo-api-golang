@@ -10,6 +10,7 @@ clean:
 build:
 	GOOS=linux GOARCH=amd64 go build -o bin/listAllBreeds ./listAllBreeds
 	GOOS=linux GOARCH=amd64 go build -o bin/listBreeds ./listBreeds
+	GOOS=linux GOARCH=amd64 go build -o bin/listSubBreeds ./listSubBreeds
 
 start:
 	sam local start-api --env-vars environment_variables.json
