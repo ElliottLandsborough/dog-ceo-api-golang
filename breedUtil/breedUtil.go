@@ -13,7 +13,7 @@ import (
 )
 
 // GetBreedPrefixesFromS3 gets all the breed fixes from s3
-func GetBreedPrefixesFromS3() *s3.ListObjectsV2Output {
+func GetBreedPrefixesFromS3(delimeter string, prefix string) *s3.ListObjectsV2Output {
 	// @todo: deal with the errors in this function
 	bucket := os.Getenv("IMAGE_BUCKET_NAME")
 
@@ -28,8 +28,8 @@ func GetBreedPrefixesFromS3() *s3.ListObjectsV2Output {
 
 	input := &s3.ListObjectsV2Input{
 		Bucket:    aws.String(bucket),
-		Delimiter: aws.String("/"),
-		Prefix:    aws.String(""),
+		Delimiter: aws.String(delimeter),
+		Prefix:    aws.String(prefix),
 		MaxKeys:   aws.Int64(1000000),
 	}
 
@@ -69,7 +69,8 @@ func GetBreedPrefixesFromS3() *s3.ListObjectsV2Output {
 
 // ListAllBreeds gets all breeds (master and sub)
 func ListAllBreeds() map[string][]string {
-	response := GetBreedPrefixesFromS3()
+	// get all breeds from s3
+	response := GetBreedPrefixesFromS3("/", "")
 
 	// create map of string arrays
 	twoDimensionalArray := map[string][]string{}
@@ -117,7 +118,8 @@ func Contains(a []string, x string) bool {
 
 // ListBreeds gets all master breeds
 func ListBreeds() []string {
-	response := GetBreedPrefixesFromS3()
+	// get all breeds from s3
+	response := GetBreedPrefixesFromS3("/", "")
 
 	// create map of string arrays
 	breedArray := []string{}
@@ -141,13 +143,14 @@ func ListBreeds() []string {
 
 // ListSubBreeds gets all sub breeds by master breed name
 func ListSubBreeds(request events.APIGatewayProxyRequest) []string {
-	response := GetBreedPrefixesFromS3()
+	// the breed from the {breed} section of url
+	breedRequested := request.PathParameters["breed"]
+
+	// get all breeds from s3
+	response := GetBreedPrefixesFromS3("/", "")
 
 	// create map of string arrays
 	breedArray := []string{}
-
-	// the breed from the {breed} section of url
-	breedRequested := request.PathParameters["breed"]
 
 	// loop through aws result
 	for _, c := range response.CommonPrefixes {
@@ -174,4 +177,24 @@ func ListSubBreeds(request events.APIGatewayProxyRequest) []string {
 	}
 
 	return breedArray
+}
+
+// ListMasterBreedImages gets all images from a master breed
+func ListMasterBreedImages(request events.APIGatewayProxyRequest) []string {
+	// the breed from the {breed} section of url
+	breedRequested := request.PathParameters["breed"]
+
+	// get all breeds from s3
+	response := GetBreedPrefixesFromS3("", breedRequested)
+
+	// create map of string arrays
+	images := []string{}
+
+	// loop through results
+	for _, c := range response.Contents {
+		// append result to slice
+		images = append(images, *c.Key)
+	}
+
+	return images
 }
