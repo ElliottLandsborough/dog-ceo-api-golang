@@ -11,14 +11,17 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 )
 
-// ListAllBreeds gets all breeds (master and sub)
-func ListAllBreeds() map[string][]string {
+// GetBreedPrefixesFromS3 gets all the breed fixes from s3
+func GetBreedPrefixesFromS3() *s3.ListObjectsV2Output {
 	// @todo: deal with the errors in this function
 	bucket := os.Getenv("IMAGE_BUCKET_NAME")
 
 	sess, err := session.NewSession(&aws.Config{
 		Region: aws.String(os.Getenv("BUCKET_REGION"))},
 	)
+
+	fmt.Println(os.Getenv("IMAGE_BUCKET_NAME"))
+	fmt.Println(os.Getenv("BUCKET_REGION"))
 
 	svc := s3.New(sess)
 
@@ -59,6 +62,13 @@ func ListAllBreeds() map[string][]string {
 			StatusCode: responseCode,
 		}, nil*/
 	}
+
+	return response
+}
+
+// ListAllBreeds gets all breeds (master and sub)
+func ListAllBreeds() map[string][]string {
+	response := GetBreedPrefixesFromS3()
 
 	// create map of string arrays
 	twoDimensionalArray := map[string][]string{}
