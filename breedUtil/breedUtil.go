@@ -179,13 +179,9 @@ func ListSubBreeds(request events.APIGatewayProxyRequest) []string {
 	return breedArray
 }
 
-// ListMasterBreedImages gets all images from a master breed
-func ListMasterBreedImages(request events.APIGatewayProxyRequest) []string {
-	// the breed from the {breed} section of url
-	breedRequested := request.PathParameters["breed"]
-
+func getBreedImagesByBreedString(breed string) []string {
 	// get all breeds from s3
-	response := GetBreedPrefixesFromS3("", breedRequested)
+	response := GetBreedPrefixesFromS3("", breed)
 
 	// create map of string arrays
 	images := []string{}
@@ -197,4 +193,22 @@ func ListMasterBreedImages(request events.APIGatewayProxyRequest) []string {
 	}
 
 	return images
+}
+
+// ListMasterBreedImages gets all images from a master breed
+func ListMasterBreedImages(request events.APIGatewayProxyRequest) []string {
+	// the breed from the {breed} section of url
+	masterBreed := request.PathParameters["breed"]
+
+	return getBreedImagesByBreedString(masterBreed)
+}
+
+// ListSubBreedImages gets all images from a sub breed
+func ListSubBreedImages(request events.APIGatewayProxyRequest) []string {
+	// the breed from the {breed} section of url
+	masterBreed := request.PathParameters["breed1"]
+	subBreed := request.PathParameters["breed2"]
+	breed := masterBreed + "-" + subBreed
+
+	return getBreedImagesByBreedString(breed)
 }
