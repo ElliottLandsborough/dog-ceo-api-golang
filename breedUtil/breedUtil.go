@@ -2,8 +2,10 @@ package lib
 
 import (
 	"fmt"
+	"math/rand"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-sdk-go/aws"
@@ -201,20 +203,53 @@ func getBreedImagesByBreedString(breed string) []string {
 	return images
 }
 
+func getRandomBreedImageByBreedString(breed string) string {
+	// get all images of a breed
+	images := getBreedImagesByBreedString(breed)
+
+	// initialize global pseudo random generator
+	rand.Seed(time.Now().Unix())
+
+	// pick random image from slice
+	image := images[rand.Intn(len(images))]
+
+	return image
+}
+
 // ListMasterBreedImages gets all images from a master breed
 func ListMasterBreedImages(request events.APIGatewayProxyRequest) []string {
 	// the breed from the {breed} section of url
-	masterBreed := request.PathParameters["breed"]
+	breed := request.PathParameters["breed"]
 
-	return getBreedImagesByBreedString(masterBreed)
+	return getBreedImagesByBreedString(breed)
 }
 
 // ListSubBreedImages gets all images from a sub breed
 func ListSubBreedImages(request events.APIGatewayProxyRequest) []string {
-	// the breed from the {breed} section of url
+	// the breed from the {breed1} section of url
 	masterBreed := request.PathParameters["breed1"]
+	// the breed from the {breed2} section of url
 	subBreed := request.PathParameters["breed2"]
 	breed := masterBreed + "-" + subBreed
 
 	return getBreedImagesByBreedString(breed)
+}
+
+// ListMasterBreedImageRandom gets a random image from all the master breed images
+func ListMasterBreedImageRandom(request events.APIGatewayProxyRequest) []string {
+	// the breed from the {breed} section of url
+	breed := request.PathParameters["breed"]
+
+	return []string{getRandomBreedImageByBreedString(breed)}
+}
+
+// ListSubBreedImageRandom gets a random image from all the sub breed images
+func ListSubBreedImageRandom(request events.APIGatewayProxyRequest) []string {
+	// the breed from the {breed1} section of url
+	masterBreed := request.PathParameters["breed1"]
+	// the breed from the {breed2} section of url
+	subBreed := request.PathParameters["breed2"]
+	breed := masterBreed + "-" + subBreed
+
+	return []string{getRandomBreedImageByBreedString(breed)}
 }
