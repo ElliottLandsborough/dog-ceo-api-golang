@@ -12,8 +12,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 )
 
-// GetBreedPrefixesFromS3 gets all the breed fixes from s3
-func GetBreedPrefixesFromS3(delimeter string, prefix string) *s3.ListObjectsV2Output {
+// ListObjectsFromS3 gets all the breed fixes from s3
+func ListObjectsFromS3(delimeter string, prefix string) *s3.ListObjectsV2Output {
 	// @todo: deal with the errors in this function
 	bucket := os.Getenv("IMAGE_BUCKET_NAME")
 
@@ -67,10 +67,16 @@ func GetBreedPrefixesFromS3(delimeter string, prefix string) *s3.ListObjectsV2Ou
 	return response
 }
 
+// GetAllBreedPrefixesFromS3 gets all breed prefixes from s3
+func GetAllBreedPrefixesFromS3() *s3.ListObjectsV2Output {
+	// @todo: return a normal slice here
+	return ListObjectsFromS3("/", "")
+}
+
 // ListAllBreeds gets all breeds (master and sub)
 func ListAllBreeds() map[string][]string {
 	// get all breeds from s3
-	response := GetBreedPrefixesFromS3("/", "")
+	response := GetAllBreedPrefixesFromS3()
 
 	// create map of string arrays
 	twoDimensionalArray := map[string][]string{}
@@ -119,7 +125,7 @@ func Contains(a []string, x string) bool {
 // ListBreeds gets all master breeds
 func ListBreeds() []string {
 	// get all breeds from s3
-	response := GetBreedPrefixesFromS3("/", "")
+	response := GetAllBreedPrefixesFromS3()
 
 	// create map of string arrays
 	breedArray := []string{}
@@ -147,7 +153,7 @@ func ListSubBreeds(request events.APIGatewayProxyRequest) []string {
 	breedRequested := request.PathParameters["breed"]
 
 	// get all breeds from s3
-	response := GetBreedPrefixesFromS3("/", "")
+	response := GetAllBreedPrefixesFromS3()
 
 	// create map of string arrays
 	breedArray := []string{}
@@ -180,8 +186,8 @@ func ListSubBreeds(request events.APIGatewayProxyRequest) []string {
 }
 
 func getBreedImagesByBreedString(breed string) []string {
-	// get all breeds from s3
-	response := GetBreedPrefixesFromS3("", breed)
+	// get all images of a breed from s3
+	response := ListObjectsFromS3("", breed)
 
 	// create map of string arrays
 	images := []string{}
