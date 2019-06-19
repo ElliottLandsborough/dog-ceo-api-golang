@@ -103,9 +103,35 @@ func ListAllBreeds() map[string][]string {
 	return twoDimensionalArray
 }
 
+// Contains checks if a string exists in a slice of strings
+func Contains(a []string, x string) bool {
+	for _, n := range a {
+		if x == n {
+			return true
+		}
+	}
+	return false
+}
+
 // ListBreeds gets all master breeds
 func ListBreeds() []string {
-	breeds := []string{"lol"}
+	response := GetBreedPrefixesFromS3()
 
-	return breeds
+	// create map of string arrays
+	breedArray := []string{}
+
+	// loop through aws result
+	for _, c := range response.CommonPrefixes {
+		breed := strings.TrimRight(*c.Prefix, "/")
+
+		// explode by -
+		exploded := strings.Split(breed, "-")
+
+		if !Contains(breedArray, exploded[0]) {
+			// append to breeds array
+			breedArray = append(breedArray, exploded[0])
+		}
+	}
+
+	return breedArray
 }
