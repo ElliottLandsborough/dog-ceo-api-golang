@@ -1,5 +1,16 @@
 # dog-ceo-api-golang
 
+## Quick start
+
+```
+$ make deps
+$ make clean
+$ make build
+$ make start
+```
+
+## More details
+
 This is a sample template for dog-ceo-api-golang - Below is a brief explanation of what we have generated for you:
 
 ```bash
