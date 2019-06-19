@@ -11,11 +11,11 @@ Globals:
     Timeout: 5
 
 Resources:
-  getAllBreeds:
+  listAllBreeds:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: bin/
-      Handler: getAllBreeds
+      Handler: listAllBreeds
       Runtime: go1.x
       Tracing: Active # https://docs.aws.amazon.com/lambda/latest/dg/lambda-x-ray.html
       Events:
@@ -23,6 +23,24 @@ Resources:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /breeds/list/all
+            Method: GET
+      Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
+        Variables:
+          IMAGE_BUCKET_NAME: "IMAGE_BUCKET_NAME env var is empty"
+          FILE_BUCKET_NAME: "FILE_BUCKET_NAME env var is empty"
+          BUCKET_REGION: "BUCKET_REGION env var is empty"
+  listBreeds:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: bin/
+      Handler: listBreeds
+      Runtime: go1.x
+      Tracing: Active # https://docs.aws.amazon.com/lambda/latest/dg/lambda-x-ray.html
+      Events:
+        CatchAll:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /breeds/list
             Method: GET
       Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
         Variables:
@@ -37,9 +55,9 @@ Outputs:
   HelloWorldAPI:
     Description: "API Gateway endpoint URL for Prod environment for First Function"
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
-  getAllBreeds:
+  listAllBreeds:
     Description: "First Lambda Function ARN"
-    Value: !GetAtt getAllBreeds.Arn
+    Value: !GetAtt listAllBreeds.Arn
   HelloWorldFunctionIamRole:
     Description: "Implicit IAM Role created for Hello World function"
     Value: !GetAtt HelloWorldFunctionRole.Arn

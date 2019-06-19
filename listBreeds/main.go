@@ -11,7 +11,7 @@ import (
 
 func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
-	result := breedUtil.GetAllBreeds()
+	result := breedUtil.ListBreeds()
 
 	resultJSON, _ := json.Marshal(result)
 

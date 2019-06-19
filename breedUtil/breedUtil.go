@@ -11,8 +11,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 )
 
-// GetAllBreeds gets all breeds
-func GetAllBreeds() map[string][]string {
+// ListAllBreeds gets all breeds (master and sub)
+func ListAllBreeds() map[string][]string {
 	// @todo: deal with the errors in this function
 	bucket := os.Getenv("IMAGE_BUCKET_NAME")
 
@@ -91,4 +91,11 @@ func GetAllBreeds() map[string][]string {
 	}
 
 	return twoDimensionalArray
+}
+
+// ListBreeds gets all master breeds
+func ListBreeds() []string {
+	breeds := []string{"lol"}
+
+	return breeds
 }
