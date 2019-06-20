@@ -29,6 +29,7 @@ Resources:
           IMAGE_BUCKET_NAME: "IMAGE_BUCKET_NAME env var is empty"
           FILE_BUCKET_NAME: "FILE_BUCKET_NAME env var is empty"
           BUCKET_REGION: "BUCKET_REGION env var is empty"
+          CDN_DOMAIN_PREFIX: ""
   listBreeds:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -47,6 +48,7 @@ Resources:
           IMAGE_BUCKET_NAME: "IMAGE_BUCKET_NAME env var is empty"
           FILE_BUCKET_NAME: "FILE_BUCKET_NAME env var is empty"
           BUCKET_REGION: "BUCKET_REGION env var is empty"
+          CDN_DOMAIN_PREFIX: ""
   listSubBreeds:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -65,6 +67,7 @@ Resources:
           IMAGE_BUCKET_NAME: "IMAGE_BUCKET_NAME env var is empty"
           FILE_BUCKET_NAME: "FILE_BUCKET_NAME env var is empty"
           BUCKET_REGION: "BUCKET_REGION env var is empty"
+          CDN_DOMAIN_PREFIX: ""
   listMasterBreedImages:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -83,6 +86,7 @@ Resources:
           IMAGE_BUCKET_NAME: "IMAGE_BUCKET_NAME env var is empty"
           FILE_BUCKET_NAME: "FILE_BUCKET_NAME env var is empty"
           BUCKET_REGION: "BUCKET_REGION env var is empty"
+          CDN_DOMAIN_PREFIX: ""
   listSubBreedImages:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -101,6 +105,7 @@ Resources:
           IMAGE_BUCKET_NAME: "IMAGE_BUCKET_NAME env var is empty"
           FILE_BUCKET_NAME: "FILE_BUCKET_NAME env var is empty"
           BUCKET_REGION: "BUCKET_REGION env var is empty"
+          CDN_DOMAIN_PREFIX: ""
   listMasterBreedImageRandom:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -119,6 +124,7 @@ Resources:
           IMAGE_BUCKET_NAME: "IMAGE_BUCKET_NAME env var is empty"
           FILE_BUCKET_NAME: "FILE_BUCKET_NAME env var is empty"
           BUCKET_REGION: "BUCKET_REGION env var is empty"
+          CDN_DOMAIN_PREFIX: ""
   listSubBreedImageRandom:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -137,6 +143,7 @@ Resources:
           IMAGE_BUCKET_NAME: "IMAGE_BUCKET_NAME env var is empty"
           FILE_BUCKET_NAME: "FILE_BUCKET_NAME env var is empty"
           BUCKET_REGION: "BUCKET_REGION env var is empty"
+          CDN_DOMAIN_PREFIX: ""
   listAnyBreedImageRandom:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -155,6 +162,7 @@ Resources:
           IMAGE_BUCKET_NAME: "IMAGE_BUCKET_NAME env var is empty"
           FILE_BUCKET_NAME: "FILE_BUCKET_NAME env var is empty"
           BUCKET_REGION: "BUCKET_REGION env var is empty"
+          CDN_DOMAIN_PREFIX: ""
   listAnyBreedMultiImageRandom:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -173,6 +181,7 @@ Resources:
           IMAGE_BUCKET_NAME: "IMAGE_BUCKET_NAME env var is empty"
           FILE_BUCKET_NAME: "FILE_BUCKET_NAME env var is empty"
           BUCKET_REGION: "BUCKET_REGION env var is empty"
+          CDN_DOMAIN_PREFIX: ""
   listMasterBreedInfo:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -191,6 +200,7 @@ Resources:
           IMAGE_BUCKET_NAME: "IMAGE_BUCKET_NAME env var is empty"
           FILE_BUCKET_NAME: "FILE_BUCKET_NAME env var is empty"
           BUCKET_REGION: "BUCKET_REGION env var is empty"
+          CDN_DOMAIN_PREFIX: ""
   listSubBreedInfo:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -209,6 +219,7 @@ Resources:
           IMAGE_BUCKET_NAME: "IMAGE_BUCKET_NAME env var is empty"
           FILE_BUCKET_NAME: "FILE_BUCKET_NAME env var is empty"
           BUCKET_REGION: "BUCKET_REGION env var is empty"
+          CDN_DOMAIN_PREFIX: ""
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function

@@ -125,8 +125,10 @@ func getObjectsByPrefix(prefix string) []string {
 
 	// loop through results
 	for _, c := range response.Contents {
+		cdn := os.Getenv("CDN_DOMAIN_PREFIX")
+		url := cdn + *c.Key
 		// append result to slice
-		objects = append(objects, *c.Key)
+		objects = append(objects, url)
 	}
 
 	return objects
