@@ -395,26 +395,61 @@ func jsonResponse(statusCode int, json string) events.APIGatewayProxyResponse {
 
 // BreedResponseOneDimensional returns a json response
 func BreedResponseOneDimensional(data []string) events.APIGatewayProxyResponse {
-	resultJSON, _ := json.Marshal(data)
+	successData := map[string]interface{}{
+		"status":  "success",
+		"message": data,
+	}
+
+	resultJSON, _ := json.Marshal(successData)
 
 	return jsonResponse(200, string(resultJSON))
 }
 
 // BreedResponseTwoDimensional returns a json response
 func BreedResponseTwoDimensional(data map[string][]string) events.APIGatewayProxyResponse {
-	resultJSON, _ := json.Marshal(data)
+	successData := map[string]interface{}{
+		"status":  "success",
+		"message": data,
+	}
+
+	resultJSON, _ := json.Marshal(successData)
 
 	return jsonResponse(200, string(resultJSON))
 }
 
 // ImageResponseOneDimensional returns a json response
 func ImageResponseOneDimensional(data []string) events.APIGatewayProxyResponse {
-	resultJSON, _ := json.Marshal(data)
+	successData := map[string]interface{}{
+		"status":  "success",
+		"message": data,
+	}
+
+	resultJSON, _ := json.Marshal(successData)
 
 	return jsonResponse(200, string(resultJSON))
 }
 
 // InfoResponseFromString returns a json response
 func InfoResponseFromString(data string) events.APIGatewayProxyResponse {
-	return jsonResponse(200, data)
+	byt := []byte(data)
+
+	var dat map[string]interface{}
+
+	if err := json.Unmarshal(byt, &dat); err != nil {
+		fail := map[string]interface{}{
+			"status":  "error",
+			"message": "no breed data exists or data is badly formatted",
+		}
+		failJSON, _ := json.Marshal(fail)
+		return jsonResponse(200, string(failJSON))
+	}
+
+	successData := map[string]interface{}{
+		"status":  "success",
+		"message": dat,
+	}
+
+	resultJSON, _ := json.Marshal(successData)
+
+	return jsonResponse(200, string(resultJSON))
 }
