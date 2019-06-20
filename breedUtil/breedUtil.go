@@ -43,19 +43,21 @@ func ListObjectsFromS3(delimeter string, prefix string) *s3.ListObjectsV2Output 
 			switch aerr.Code() {
 			case s3.ErrCodeNoSuchBucket:
 				fmt.Println(aerr.Error())
+				os.Exit(1)
+			case s3.ErrCodeNoSuchKey:
+				fmt.Println(aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
 		} else {
 			fmt.Println(err.Error())
 		}
-		os.Exit(1)
 	}
 
 	return response
 }
 
-func getObjectFromS3(key string) *s3.GetObjectOutput {
+func getObjectFromS3(key string) (*s3.GetObjectOutput, error) {
 	bucket := os.Getenv("FILE_BUCKET_NAME")
 
 	sess, err := session.NewSession(&aws.Config{
@@ -77,16 +79,19 @@ func getObjectFromS3(key string) *s3.GetObjectOutput {
 			switch aerr.Code() {
 			case s3.ErrCodeNoSuchBucket:
 				fmt.Println(aerr.Error())
+				os.Exit(1)
+			case s3.ErrCodeNoSuchKey:
+				fmt.Println(aerr.Error())
+				return nil, aerr
 			default:
 				fmt.Println(aerr.Error())
 			}
 		} else {
 			fmt.Println(err.Error())
 		}
-		os.Exit(1)
 	}
 
-	return response
+	return response, err
 }
 
 func getObjectContents(object *s3.GetObjectOutput) string {
@@ -346,13 +351,18 @@ func generateBreedYamlKey(breed string) string {
 	return "breed-info/" + breed + ".yaml"
 }
 
-func getBreedInfo(breed string) string {
+func getBreedInfo(breed string) (string, error) {
 	key := generateBreedYamlKey(breed)
-	object := getObjectFromS3(key)
+	object, err := getObjectFromS3(key)
+
+	if err != nil {
+		return "{}", err
+	}
+
 	yaml := getObjectContents(object)
 	json := parseYamlToJSON(yaml)
 
-	return json
+	return json, nil
 }
 
 func parseYamlToJSON(yamlString string) string {
@@ -367,22 +377,26 @@ func parseYamlToJSON(yamlString string) string {
 }
 
 // ListMasterBreedInfo gets the yaml file from s3 and converts it to json
-func ListMasterBreedInfo(request events.APIGatewayProxyRequest) string {
+func ListMasterBreedInfo(request events.APIGatewayProxyRequest) (string, error) {
 	// the breed from the {breed} section of url
 	breed := request.PathParameters["breed"]
 
-	return getBreedInfo(breed)
+	info, err := getBreedInfo(breed)
+
+	return info, err
 }
 
 // ListSubBreedInfo gets the yaml file from s3 and converts it to json
-func ListSubBreedInfo(request events.APIGatewayProxyRequest) string {
+func ListSubBreedInfo(request events.APIGatewayProxyRequest) (string, error) {
 	// the breed from the {breed1} section of url
 	masterBreed := request.PathParameters["breed1"]
 	// the breed from the {breed2} section of url
 	subBreed := request.PathParameters["breed2"]
 	breed := masterBreed + "-" + subBreed
 
-	return getBreedInfo(breed)
+	info, err := getBreedInfo(breed)
+
+	return info, err
 }
 
 // returns a json response with status code
@@ -438,10 +452,10 @@ func InfoResponseFromString(data string) events.APIGatewayProxyResponse {
 	if err := json.Unmarshal(byt, &dat); err != nil {
 		fail := map[string]interface{}{
 			"status":  "error",
-			"message": "no breed data exists or data is badly formatted",
+			"message": "data is badly formatted",
 		}
 		failJSON, _ := json.Marshal(fail)
-		return jsonResponse(200, string(failJSON))
+		return jsonResponse(500, string(failJSON))
 	}
 
 	successData := map[string]interface{}{
@@ -452,4 +466,14 @@ func InfoResponseFromString(data string) events.APIGatewayProxyResponse {
 	resultJSON, _ := json.Marshal(successData)
 
 	return jsonResponse(200, string(resultJSON))
+}
+
+// KeyNotFoundErrorResponse is what happens when a breed doesnt exist
+func KeyNotFoundErrorResponse() events.APIGatewayProxyResponse {
+	fail := map[string]interface{}{
+		"status":  "error",
+		"message": "Breed not found.",
+	}
+	failJSON, _ := json.Marshal(fail)
+	return jsonResponse(404, string(failJSON))
 }

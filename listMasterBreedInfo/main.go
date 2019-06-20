@@ -8,7 +8,12 @@ import (
 )
 
 func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	result := breedUtil.ListMasterBreedInfo(request)
+	result, err := breedUtil.ListMasterBreedInfo(request)
+
+	if err != nil {
+		return breedUtil.KeyNotFoundErrorResponse(), nil
+	}
+
 	return breedUtil.InfoResponseFromString(result), nil
 }
 
