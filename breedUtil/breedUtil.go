@@ -16,16 +16,11 @@ import (
 )
 
 // ListObjectsFromS3 gets all the breed fixes from s3
-func ListObjectsFromS3(delimeter string, prefix string) *s3.ListObjectsV2Output {
+func ListObjectsFromS3(bucket string, delimeter string, prefix string) *s3.ListObjectsV2Output {
 	// @todo: deal with the errors in this function
-	bucket := os.Getenv("IMAGE_BUCKET_NAME")
-
 	sess, err := session.NewSession(&aws.Config{
 		Region: aws.String(os.Getenv("BUCKET_REGION"))},
 	)
-
-	fmt.Println(os.Getenv("IMAGE_BUCKET_NAME"))
-	fmt.Println(os.Getenv("BUCKET_REGION"))
 
 	svc := s3.New(sess)
 
@@ -72,7 +67,9 @@ func ListObjectsFromS3(delimeter string, prefix string) *s3.ListObjectsV2Output 
 
 // GetRootPrefixesFromS3 gets all breed prefixes from s3
 func GetRootPrefixesFromS3() []string {
-	return prefixesToSlice(ListObjectsFromS3("/", ""))
+	bucket := os.Getenv("IMAGE_BUCKET_NAME")
+
+	return prefixesToSlice(ListObjectsFromS3(bucket, "/", ""))
 }
 
 // converts listObjectsV2Output response with prefixes to string slice
@@ -90,8 +87,10 @@ func prefixesToSlice(listObjectsV2Output *s3.ListObjectsV2Output) []string {
 
 // get objects from s3 which start with string
 func getObjectsByPrefix(prefix string) []string {
+	bucket := os.Getenv("IMAGE_BUCKET_NAME")
+
 	// get all objects from prefix* on s3
-	response := ListObjectsFromS3("", prefix)
+	response := ListObjectsFromS3(bucket, "", prefix)
 
 	// create map of string arrays
 	objects := []string{}
