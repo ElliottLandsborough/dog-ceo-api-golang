@@ -223,7 +223,7 @@ func ListBreeds() []string {
 // ListSubBreeds gets all sub breeds by master breed name
 func ListSubBreeds(request events.APIGatewayProxyRequest) []string {
 	// the breed from the {breed} section of url
-	breedRequested := request.PathParameters["breed"]
+	breedRequested := request.PathParameters["breed1"]
 
 	// get all breeds from s3
 	breeds := GetRootPrefixesFromS3()
@@ -293,7 +293,7 @@ func getMultipleRandomItemsFromSliceString(slice []string, amount int) []string 
 // ListMasterBreedImages gets all images from a master breed
 func ListMasterBreedImages(request events.APIGatewayProxyRequest) []string {
 	// the breed from the {breed} section of url
-	breed := request.PathParameters["breed"]
+	breed := request.PathParameters["breed1"]
 
 	return getObjectsByPrefix(breed)
 }
@@ -312,7 +312,7 @@ func ListSubBreedImages(request events.APIGatewayProxyRequest) []string {
 // ListMasterBreedImageRandom gets a random image from all the master breed images
 func ListMasterBreedImageRandom(request events.APIGatewayProxyRequest) []string {
 	// the breed from the {breed} section of url
-	breed := request.PathParameters["breed"]
+	breed := request.PathParameters["breed1"]
 
 	return []string{getRandomBreedImageByBreedString(breed)}
 }
@@ -379,7 +379,7 @@ func parseYamlToJSON(yamlString string) string {
 // ListMasterBreedInfo gets the yaml file from s3 and converts it to json
 func ListMasterBreedInfo(request events.APIGatewayProxyRequest) (string, error) {
 	// the breed from the {breed} section of url
-	breed := request.PathParameters["breed"]
+	breed := request.PathParameters["breed1"]
 
 	info, err := getBreedInfo(breed)
 

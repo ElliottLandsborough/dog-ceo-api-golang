@@ -60,7 +60,7 @@ Resources:
         CatchAll:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            Path: /breed/{breed}/list
+            Path: /breed/{breed1}/list
             Method: GET
       Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
         Variables:
@@ -79,7 +79,7 @@ Resources:
         CatchAll:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            Path: /breed/{breed}/images
+            Path: /breed/{breed1}/images
             Method: GET
       Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
         Variables:
@@ -117,7 +117,7 @@ Resources:
         CatchAll:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            Path: /breed/{breed}/images/random
+            Path: /breed/{breed1}/images/random
             Method: GET
       Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
         Variables:
@@ -193,7 +193,7 @@ Resources:
         CatchAll:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
-            Path: /breed/{breed}
+            Path: /breed/{breed1}
             Method: GET
       Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
         Variables:
@@ -220,44 +220,3 @@ Resources:
           FILE_BUCKET_NAME: "FILE_BUCKET_NAME env var is empty"
           BUCKET_REGION: "BUCKET_REGION env var is empty"
           CDN_DOMAIN_PREFIX: ""
-
-Outputs:
-  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
-  # Find out more about other implicit resources you can reference within SAM
-  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
-  DogCeoAPI:
-    Description: "API Gateway endpoint URL for Prod environment for First Function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
-  listAllBreeds:
-    Description: "List all master/sub breeds as a 2d array"
-    Value: !GetAtt listAllBreedsFunctionRole.Arn
-  listBreeds:
-    Description: "List all master breeds"
-    Value: !GetAtt listBreedsFunctionRole.Arn 
-  listSubBreeds:
-    Description: "List sub breeds of a master breed"
-    Value: !GetAtt listSubBreedsFunctionRole.Arn 
-  listMasterBreedImages:
-    Description: "List all images of a master breed (sub breed inclusive)"
-    Value: !GetAtt listMasterBreedImagesFunctionRole.Arn 
-  listSubBreedImages:
-    Description: "List all images of a sub breed"
-    Value: !GetAtt listSubBreedImagesFunctionRole.Arn 
-  listMasterBreedImageRandom:
-    Description: "Get a random image from a master breed (sub breed inclusive)"
-    Value: !GetAtt listMasterBreedImageRandomFunctionRole.Arn 
-  listSubBreedImageRandom:
-    Description: "Get a random image from a sub breed"
-    Value: !GetAtt listSubBreedImageRandomFunctionRole.Arn 
-  listAnyBreedImageRandom:
-    Description: "Get a random image from any breed"
-    Value: !GetAtt listAnyBreedImageRandomFunctionRole.Arn 
-  listAnyBreedMultiImageRandom:
-    Description: "Get multiple random images from any breed"
-    Value: !GetAtt listAnyBreedMultiImageRandomFunctionRole.Arn 
-  listMasterBreedInfo:
-    Description: "Display information about a master breed"
-    Value: !GetAtt listMasterBreedInfoFunctionRole.Arn 
-  listSubBreedInfo:
-    Description: "Display information about a sub breed"
-    Value: !GetAtt listSubBreedInfoFunctionRole.Arn 
