@@ -1,6 +1,7 @@
 package lib
 
 import (
+	"bytes"
 	"fmt"
 	"math/rand"
 	"os"
@@ -13,6 +14,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/ghodss/yaml"
 )
 
 // ListObjectsFromS3 gets all the breed fixes from s3
@@ -23,9 +25,6 @@ func ListObjectsFromS3(delimeter string, prefix string) *s3.ListObjectsV2Output 
 	sess, err := session.NewSession(&aws.Config{
 		Region: aws.String(os.Getenv("BUCKET_REGION"))},
 	)
-
-	fmt.Println(os.Getenv("IMAGE_BUCKET_NAME"))
-	fmt.Println(os.Getenv("BUCKET_REGION"))
 
 	svc := s3.New(sess)
 
@@ -68,6 +67,61 @@ func ListObjectsFromS3(delimeter string, prefix string) *s3.ListObjectsV2Output 
 	}
 
 	return response
+}
+
+func getObjectFromS3(key string) *s3.GetObjectOutput {
+	// @todo: deal with the errors in this function
+	bucket := os.Getenv("FILE_BUCKET_NAME")
+
+	sess, err := session.NewSession(&aws.Config{
+		Region: aws.String(os.Getenv("BUCKET_REGION"))},
+	)
+
+	svc := s3.New(sess)
+
+	response, err := svc.GetObject(&s3.GetObjectInput{
+		Bucket: aws.String(bucket),
+		Key:    aws.String(key),
+	})
+
+	//var responseCode int
+	//var responseBody string
+
+	// handle the error...
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case s3.ErrCodeNoSuchBucket:
+				fmt.Println(s3.ErrCodeNoSuchBucket, aerr.Error())
+				//responseCode = 404
+				//responseBody = aerr.Error()
+			default:
+				fmt.Println(aerr.Error())
+				//responseCode = 500
+				//responseBody = aerr.Error()
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+			//responseCode = 500
+			//responseBody = err.Error()
+		}
+		/*return events.APIGatewayProxyResponse{
+			Body:       fmt.Sprintf("%v", responseBody),
+			StatusCode: responseCode,
+		}, nil*/
+	}
+
+	return response
+}
+
+func getObjectContents(object *s3.GetObjectOutput) string {
+	buf := new(bytes.Buffer)
+	buf.ReadFrom(object.Body)
+	s := buf.String() // Does a complete copy of the bytes in the buffer.
+
+	return s
 }
 
 // GetRootPrefixesFromS3 gets all breed prefixes from s3
@@ -313,10 +367,43 @@ func ListAnyBreedMultiImageRandom(request events.APIGatewayProxyRequest) []strin
 	return getMultipleRandomItemsFromSliceString(getObjectsByPrefix(getRandomPrefix()), i)
 }
 
-func ListMasterBreedInfo(request events.APIGatewayProxyRequest) []string {
-	return []string{}
+func generateBreedYamlKey(breed string) string {
+	return "breed-info/" + breed + ".yaml"
 }
 
-func ListSubBreedInfo(request events.APIGatewayProxyRequest) []string {
-	return []string{}
+func getBreedInfo(breed string) string {
+	key := generateBreedYamlKey(breed)
+	object := getObjectFromS3(key)
+	yaml := getObjectContents(object)
+	json := parseYamlToJson(yaml)
+
+	return json
+}
+
+func parseYamlToJson(yamlString string) string {
+
+	data, err := yaml.YAMLToJSON([]byte(yamlString))
+	if err != nil {
+		fmt.Printf("err: %v\n", err)
+		return "error"
+	}
+
+	return string(data)
+}
+
+func ListMasterBreedInfo(request events.APIGatewayProxyRequest) string {
+	// the breed from the {breed} section of url
+	breed := request.PathParameters["breed"]
+
+	return getBreedInfo(breed)
+}
+
+func ListSubBreedInfo(request events.APIGatewayProxyRequest) string {
+	// the breed from the {breed1} section of url
+	masterBreed := request.PathParameters["breed1"]
+	// the breed from the {breed2} section of url
+	subBreed := request.PathParameters["breed2"]
+	breed := masterBreed + "-" + subBreed
+
+	return getBreedInfo(breed)
 }
