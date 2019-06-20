@@ -63,3 +63,21 @@ We use `testing` package that is built-in in Golang and you can simply run the f
 ```shell
 go test -v ./hello-world/
 ```
+
+### Example environment_variables.json
+```json
+{
+  "listAllBreeds": {
+  	"IMAGE_BUCKET_NAME": "dog-ceo-stanford-files",
+    "FILE_BUCKET_NAME": "dog-ceo-api-static-content-dev",
+    "BUCKET_REGION": "eu-west-1",
+    "CDN_DOMAIN_PREFIX": "https://images.dog.ceo/breeds/"
+  },
+  "listBreeds": {
+  	"IMAGE_BUCKET_NAME": "dog-ceo-stanford-files",
+    "FILE_BUCKET_NAME": "dog-ceo-api-static-content-dev",
+    "BUCKET_REGION": "eu-west-1",
+    "CDN_DOMAIN_PREFIX": "https://images.dog.ceo/breeds/"
+  }
+}
+```
