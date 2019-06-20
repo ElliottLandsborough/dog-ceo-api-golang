@@ -16,6 +16,7 @@ Resources:
       CodeUri: bin/
       Handler: listAllBreeds
       Runtime: go1.x
+      Role: arn:aws:iam::633322954385:role/dog-ceo-api-golang-dev-sam
       Events:
         CatchAll:
           Type: Api
@@ -34,6 +35,7 @@ Resources:
       CodeUri: bin/
       Handler: listBreeds
       Runtime: go1.x
+      Role: arn:aws:iam::633322954385:role/dog-ceo-api-golang-dev-sam
       Events:
         CatchAll:
           Type: Api
@@ -52,6 +54,7 @@ Resources:
       CodeUri: bin/
       Handler: listSubBreeds
       Runtime: go1.x
+      Role: arn:aws:iam::633322954385:role/dog-ceo-api-golang-dev-sam
       Events:
         CatchAll:
           Type: Api
@@ -70,6 +73,7 @@ Resources:
       CodeUri: bin/
       Handler: listMasterBreedImages
       Runtime: go1.x
+      Role: arn:aws:iam::633322954385:role/dog-ceo-api-golang-dev-sam
       Events:
         CatchAll:
           Type: Api
@@ -88,6 +92,7 @@ Resources:
       CodeUri: bin/
       Handler: listSubBreedImages
       Runtime: go1.x
+      Role: arn:aws:iam::633322954385:role/dog-ceo-api-golang-dev-sam
       Events:
         CatchAll:
           Type: Api
@@ -106,6 +111,7 @@ Resources:
       CodeUri: bin/
       Handler: listMasterBreedImageRandom
       Runtime: go1.x
+      Role: arn:aws:iam::633322954385:role/dog-ceo-api-golang-dev-sam
       Events:
         CatchAll:
           Type: Api
@@ -124,6 +130,7 @@ Resources:
       CodeUri: bin/
       Handler: listSubBreedImageRandom
       Runtime: go1.x
+      Role: arn:aws:iam::633322954385:role/dog-ceo-api-golang-dev-sam
       Events:
         CatchAll:
           Type: Api
@@ -142,6 +149,7 @@ Resources:
       CodeUri: bin/
       Handler: listAnyBreedImageRandom
       Runtime: go1.x
+      Role: arn:aws:iam::633322954385:role/dog-ceo-api-golang-dev-sam
       Events:
         CatchAll:
           Type: Api
@@ -160,6 +168,7 @@ Resources:
       CodeUri: bin/
       Handler: listAnyBreedMultiImageRandom
       Runtime: go1.x
+      Role: arn:aws:iam::633322954385:role/dog-ceo-api-golang-dev-sam
       Events:
         CatchAll:
           Type: Api
@@ -178,6 +187,7 @@ Resources:
       CodeUri: bin/
       Handler: listMasterBreedInfo
       Runtime: go1.x
+      Role: arn:aws:iam::633322954385:role/dog-ceo-api-golang-dev-sam
       Events:
         CatchAll:
           Type: Api
@@ -196,6 +206,7 @@ Resources:
       CodeUri: bin/
       Handler: listSubBreedInfo
       Runtime: go1.x
+      Role: arn:aws:iam::633322954385:role/dog-ceo-api-golang-dev-sam
       Events:
         CatchAll:
           Type: Api
