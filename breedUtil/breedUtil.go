@@ -402,6 +402,7 @@ func ListSubBreedInfo(request events.APIGatewayProxyRequest) (string, error) {
 // returns a json response with status code
 func jsonResponse(statusCode int, json string) events.APIGatewayProxyResponse {
 	return events.APIGatewayProxyResponse{
+		Headers:    map[string]string{"Content-Type": "application/json"},
 		Body:       json,
 		StatusCode: statusCode,
 	}
