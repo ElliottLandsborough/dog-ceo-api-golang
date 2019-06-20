@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -87,6 +88,7 @@ func prefixesToSlice(listObjectsV2Output *s3.ListObjectsV2Output) []string {
 	return breeds
 }
 
+// get objects from s3 which start with string
 func getObjectsByPrefix(prefix string) []string {
 	// get all objects from prefix* on s3
 	response := ListObjectsFromS3("", prefix)
@@ -101,6 +103,29 @@ func getObjectsByPrefix(prefix string) []string {
 	}
 
 	return objects
+}
+
+// contains checks if a string exists in a slice of strings
+func contains(a []string, x string) bool {
+	for _, n := range a {
+		if x == n {
+			return true
+		}
+	}
+	return false
+}
+
+func getRandomItemFromSliceString(slice []string) string {
+	// initialize global pseudo random generator
+	rand.Seed(time.Now().Unix())
+
+	// pick random string from slice
+	return slice[rand.Intn(len(slice))]
+}
+
+// get all breeds from s3 and pick a random one
+func getRandomPrefix() string {
+	return getRandomItemFromSliceString(GetRootPrefixesFromS3())
 }
 
 // ListAllBreeds gets all breeds (master and sub)
@@ -139,16 +164,6 @@ func ListAllBreeds() map[string][]string {
 	return twoDimensionalArray
 }
 
-// Contains checks if a string exists in a slice of strings
-func Contains(a []string, x string) bool {
-	for _, n := range a {
-		if x == n {
-			return true
-		}
-	}
-	return false
-}
-
 // ListBreeds gets all master breeds
 func ListBreeds() []string {
 	// get all breeds from s3
@@ -162,7 +177,7 @@ func ListBreeds() []string {
 		// explode by -
 		exploded := strings.Split(breed, "-")
 
-		if !Contains(breedArray, exploded[0]) {
+		if !contains(breedArray, exploded[0]) {
 			// append to breeds array
 			breedArray = append(breedArray, exploded[0])
 		}
@@ -210,13 +225,35 @@ func getRandomBreedImageByBreedString(breed string) string {
 	// get all images of a breed
 	images := getObjectsByPrefix(breed)
 
+	// pick random image from slice
+	image := getRandomItemFromSliceString(images)
+
+	return image
+}
+
+func shuffleSlice(slice []string) []string {
 	// initialize global pseudo random generator
 	rand.Seed(time.Now().Unix())
 
-	// pick random image from slice
-	image := images[rand.Intn(len(images))]
+	// shuffle the items
+	rand.Shuffle(len(slice), func(i, j int) {
+		slice[i], slice[j] = slice[j], slice[i]
+	})
 
-	return image
+	return slice
+}
+
+func getMultipleRandomItemsFromSliceString(slice []string, amount int) []string {
+	// shuffle the items
+	slice = shuffleSlice(slice)
+
+	// dont bother if we want all the items
+	if amount > len(slice) {
+		return slice
+	}
+
+	// return {amount} items from slice
+	return slice[0:amount]
 }
 
 // ListMasterBreedImages gets all images from a master breed
@@ -257,12 +294,23 @@ func ListSubBreedImageRandom(request events.APIGatewayProxyRequest) []string {
 	return []string{getRandomBreedImageByBreedString(breed)}
 }
 
+// ListAnyBreedImageRandom gets random breed, gets all images, returns random image
 func ListAnyBreedImageRandom() []string {
-	return []string{}
+	return []string{getRandomBreedImageByBreedString(getRandomPrefix())}
 }
 
+// ListAnyBreedMultiImageRandom gets all images from a random breed, returns {count} images
 func ListAnyBreedMultiImageRandom(request events.APIGatewayProxyRequest) []string {
-	return []string{}
+	s := request.PathParameters["count"]
+
+	// string to int
+	i, err := strconv.Atoi(s)
+	if err != nil {
+		// handle error
+		i = 1
+	}
+
+	return getMultipleRandomItemsFromSliceString(getObjectsByPrefix(getRandomPrefix()), i)
 }
 
 func ListMasterBreedInfo(request events.APIGatewayProxyRequest) []string {
