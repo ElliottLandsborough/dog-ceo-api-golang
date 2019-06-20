@@ -383,6 +383,7 @@ func ListSubBreedInfo(request events.APIGatewayProxyRequest) string {
 	return getBreedInfo(breed)
 }
 
+// returns a json response with status code
 func jsonResponse(statusCode int, json string) events.APIGatewayProxyResponse {
 	return events.APIGatewayProxyResponse{
 		Body:       json,
@@ -390,24 +391,28 @@ func jsonResponse(statusCode int, json string) events.APIGatewayProxyResponse {
 	}
 }
 
+// BreedResponseOneDimensional returns a json response
 func BreedResponseOneDimensional(data []string) events.APIGatewayProxyResponse {
 	resultJSON, _ := json.Marshal(data)
 
 	return jsonResponse(200, string(resultJSON))
 }
 
+// BreedResponseTwoDimensional returns a json response
 func BreedResponseTwoDimensional(data map[string][]string) events.APIGatewayProxyResponse {
 	resultJSON, _ := json.Marshal(data)
 
 	return jsonResponse(200, string(resultJSON))
 }
 
+// ImageResponseOneDimensional returns a json response
 func ImageResponseOneDimensional(data []string) events.APIGatewayProxyResponse {
 	resultJSON, _ := json.Marshal(data)
 
 	return jsonResponse(200, string(resultJSON))
 }
 
+// InfoResponseFromString returns a json response
 func InfoResponseFromString(data string) events.APIGatewayProxyResponse {
 	return jsonResponse(200, data)
 }
