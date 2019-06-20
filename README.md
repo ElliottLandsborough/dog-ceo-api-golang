@@ -1,6 +1,7 @@
 # dog.ceo golang lambda functions
 
 The AWS Lambda functions used for the https://dog.ceo api.
+Old version in node: https://github.com/ElliottLandsborough/dog-ceo-api-node
 
 ## Quick start
 
