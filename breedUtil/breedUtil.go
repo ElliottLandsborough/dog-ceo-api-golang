@@ -2,6 +2,7 @@ package lib
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"math/rand"
 	"os"
@@ -19,7 +20,6 @@ import (
 
 // ListObjectsFromS3 gets all the breed fixes from s3
 func ListObjectsFromS3(delimeter string, prefix string) *s3.ListObjectsV2Output {
-	// @todo: deal with the errors in this function
 	bucket := os.Getenv("IMAGE_BUCKET_NAME")
 
 	sess, err := session.NewSession(&aws.Config{
@@ -37,40 +37,25 @@ func ListObjectsFromS3(delimeter string, prefix string) *s3.ListObjectsV2Output 
 
 	response, err := svc.ListObjectsV2(input)
 
-	//var responseCode int
-	//var responseBody string
-
 	// handle the error...
 	if err != nil {
 		if aerr, ok := err.(awserr.Error); ok {
 			switch aerr.Code() {
 			case s3.ErrCodeNoSuchBucket:
-				fmt.Println(s3.ErrCodeNoSuchBucket, aerr.Error())
-				//responseCode = 404
-				//responseBody = aerr.Error()
+				fmt.Println(aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
-				//responseCode = 500
-				//responseBody = aerr.Error()
 			}
 		} else {
-			// Print the error, cast err to awserr.Error to get the Code and
-			// Message from an error.
 			fmt.Println(err.Error())
-			//responseCode = 500
-			//responseBody = err.Error()
 		}
-		/*return events.APIGatewayProxyResponse{
-			Body:       fmt.Sprintf("%v", responseBody),
-			StatusCode: responseCode,
-		}, nil*/
+		os.Exit(1)
 	}
 
 	return response
 }
 
 func getObjectFromS3(key string) *s3.GetObjectOutput {
-	// @todo: deal with the errors in this function
 	bucket := os.Getenv("FILE_BUCKET_NAME")
 
 	sess, err := session.NewSession(&aws.Config{
@@ -79,38 +64,26 @@ func getObjectFromS3(key string) *s3.GetObjectOutput {
 
 	svc := s3.New(sess)
 
-	response, err := svc.GetObject(&s3.GetObjectInput{
+	input := &s3.GetObjectInput{
 		Bucket: aws.String(bucket),
 		Key:    aws.String(key),
-	})
+	}
 
-	//var responseCode int
-	//var responseBody string
+	response, err := svc.GetObject(input)
 
 	// handle the error...
 	if err != nil {
 		if aerr, ok := err.(awserr.Error); ok {
 			switch aerr.Code() {
 			case s3.ErrCodeNoSuchBucket:
-				fmt.Println(s3.ErrCodeNoSuchBucket, aerr.Error())
-				//responseCode = 404
-				//responseBody = aerr.Error()
+				fmt.Println(aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
-				//responseCode = 500
-				//responseBody = aerr.Error()
 			}
 		} else {
-			// Print the error, cast err to awserr.Error to get the Code and
-			// Message from an error.
 			fmt.Println(err.Error())
-			//responseCode = 500
-			//responseBody = err.Error()
 		}
-		/*return events.APIGatewayProxyResponse{
-			Body:       fmt.Sprintf("%v", responseBody),
-			StatusCode: responseCode,
-		}, nil*/
+		os.Exit(1)
 	}
 
 	return response
@@ -408,4 +381,33 @@ func ListSubBreedInfo(request events.APIGatewayProxyRequest) string {
 	breed := masterBreed + "-" + subBreed
 
 	return getBreedInfo(breed)
+}
+
+func jsonResponse(statusCode int, json string) events.APIGatewayProxyResponse {
+	return events.APIGatewayProxyResponse{
+		Body:       json,
+		StatusCode: statusCode,
+	}
+}
+
+func BreedResponseOneDimensional(data []string) events.APIGatewayProxyResponse {
+	resultJSON, _ := json.Marshal(data)
+
+	return jsonResponse(200, string(resultJSON))
+}
+
+func BreedResponseTwoDimensional(data map[string][]string) events.APIGatewayProxyResponse {
+	resultJSON, _ := json.Marshal(data)
+
+	return jsonResponse(200, string(resultJSON))
+}
+
+func ImageResponseOneDimensional(data []string) events.APIGatewayProxyResponse {
+	resultJSON, _ := json.Marshal(data)
+
+	return jsonResponse(200, string(resultJSON))
+}
+
+func InfoResponseFromString(data string) events.APIGatewayProxyResponse {
+	return jsonResponse(200, data)
 }
