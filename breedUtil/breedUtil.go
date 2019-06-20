@@ -375,12 +375,12 @@ func getBreedInfo(breed string) string {
 	key := generateBreedYamlKey(breed)
 	object := getObjectFromS3(key)
 	yaml := getObjectContents(object)
-	json := parseYamlToJson(yaml)
+	json := parseYamlToJSON(yaml)
 
 	return json
 }
 
-func parseYamlToJson(yamlString string) string {
+func parseYamlToJSON(yamlString string) string {
 
 	data, err := yaml.YAMLToJSON([]byte(yamlString))
 	if err != nil {
@@ -391,6 +391,7 @@ func parseYamlToJson(yamlString string) string {
 	return string(data)
 }
 
+// ListMasterBreedInfo gets the yaml file from s3 and converts it to json
 func ListMasterBreedInfo(request events.APIGatewayProxyRequest) string {
 	// the breed from the {breed} section of url
 	breed := request.PathParameters["breed"]
@@ -398,6 +399,7 @@ func ListMasterBreedInfo(request events.APIGatewayProxyRequest) string {
 	return getBreedInfo(breed)
 }
 
+// ListSubBreedInfo gets the yaml file from s3 and converts it to json
 func ListSubBreedInfo(request events.APIGatewayProxyRequest) string {
 	// the breed from the {breed1} section of url
 	masterBreed := request.PathParameters["breed1"]
