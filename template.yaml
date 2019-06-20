@@ -25,10 +25,10 @@ Resources:
             Method: GET
       Environment:
         Variables:
-          IMAGE_BUCKET_NAME: "IMAGE_BUCKET_NAME env var is empty"
-          FILE_BUCKET_NAME: "FILE_BUCKET_NAME env var is empty"
-          BUCKET_REGION: "BUCKET_REGION env var is empty"
-          CDN_DOMAIN_PREFIX: ""
+          IMAGE_BUCKET_NAME: "dog-ceo-stanford-files"
+          FILE_BUCKET_NAME: "dog-ceo-api-static-content-de"
+          BUCKET_REGION: "eu-west-1"
+          CDN_DOMAIN_PREFIX: "https://images.dog.ceo/breeds/"
   listBreeds:
     Type: AWS::Serverless::Function
     Properties:
@@ -44,10 +44,10 @@ Resources:
             Method: GET
       Environment:
         Variables:
-          IMAGE_BUCKET_NAME: "IMAGE_BUCKET_NAME env var is empty"
-          FILE_BUCKET_NAME: "FILE_BUCKET_NAME env var is empty"
-          BUCKET_REGION: "BUCKET_REGION env var is empty"
-          CDN_DOMAIN_PREFIX: ""
+          IMAGE_BUCKET_NAME: "dog-ceo-stanford-files"
+          FILE_BUCKET_NAME: "dog-ceo-api-static-content-de"
+          BUCKET_REGION: "eu-west-1"
+          CDN_DOMAIN_PREFIX: "https://images.dog.ceo/breeds/"
   listSubBreeds:
     Type: AWS::Serverless::Function
     Properties:
@@ -63,10 +63,10 @@ Resources:
             Method: GET
       Environment:
         Variables:
-          IMAGE_BUCKET_NAME: "IMAGE_BUCKET_NAME env var is empty"
-          FILE_BUCKET_NAME: "FILE_BUCKET_NAME env var is empty"
-          BUCKET_REGION: "BUCKET_REGION env var is empty"
-          CDN_DOMAIN_PREFIX: ""
+          IMAGE_BUCKET_NAME: "dog-ceo-stanford-files"
+          FILE_BUCKET_NAME: "dog-ceo-api-static-content-de"
+          BUCKET_REGION: "eu-west-1"
+          CDN_DOMAIN_PREFIX: "https://images.dog.ceo/breeds/"
   listMasterBreedImages:
     Type: AWS::Serverless::Function
     Properties:
@@ -82,10 +82,10 @@ Resources:
             Method: GET
       Environment:
         Variables:
-          IMAGE_BUCKET_NAME: "IMAGE_BUCKET_NAME env var is empty"
-          FILE_BUCKET_NAME: "FILE_BUCKET_NAME env var is empty"
-          BUCKET_REGION: "BUCKET_REGION env var is empty"
-          CDN_DOMAIN_PREFIX: ""
+          IMAGE_BUCKET_NAME: "dog-ceo-stanford-files"
+          FILE_BUCKET_NAME: "dog-ceo-api-static-content-de"
+          BUCKET_REGION: "eu-west-1"
+          CDN_DOMAIN_PREFIX: "https://images.dog.ceo/breeds/"
   listSubBreedImages:
     Type: AWS::Serverless::Function
     Properties:
@@ -101,10 +101,10 @@ Resources:
             Method: GET
       Environment:
         Variables:
-          IMAGE_BUCKET_NAME: "IMAGE_BUCKET_NAME env var is empty"
-          FILE_BUCKET_NAME: "FILE_BUCKET_NAME env var is empty"
-          BUCKET_REGION: "BUCKET_REGION env var is empty"
-          CDN_DOMAIN_PREFIX: ""
+          IMAGE_BUCKET_NAME: "dog-ceo-stanford-files"
+          FILE_BUCKET_NAME: "dog-ceo-api-static-content-de"
+          BUCKET_REGION: "eu-west-1"
+          CDN_DOMAIN_PREFIX: "https://images.dog.ceo/breeds/"
   listMasterBreedImageRandom:
     Type: AWS::Serverless::Function
     Properties:
@@ -120,10 +120,10 @@ Resources:
             Method: GET
       Environment:
         Variables:
-          IMAGE_BUCKET_NAME: "IMAGE_BUCKET_NAME env var is empty"
-          FILE_BUCKET_NAME: "FILE_BUCKET_NAME env var is empty"
-          BUCKET_REGION: "BUCKET_REGION env var is empty"
-          CDN_DOMAIN_PREFIX: ""
+          IMAGE_BUCKET_NAME: "dog-ceo-stanford-files"
+          FILE_BUCKET_NAME: "dog-ceo-api-static-content-de"
+          BUCKET_REGION: "eu-west-1"
+          CDN_DOMAIN_PREFIX: "https://images.dog.ceo/breeds/"
   listSubBreedImageRandom:
     Type: AWS::Serverless::Function
     Properties:
@@ -139,10 +139,10 @@ Resources:
             Method: GET
       Environment:
         Variables:
-          IMAGE_BUCKET_NAME: "IMAGE_BUCKET_NAME env var is empty"
-          FILE_BUCKET_NAME: "FILE_BUCKET_NAME env var is empty"
-          BUCKET_REGION: "BUCKET_REGION env var is empty"
-          CDN_DOMAIN_PREFIX: ""
+          IMAGE_BUCKET_NAME: "dog-ceo-stanford-files"
+          FILE_BUCKET_NAME: "dog-ceo-api-static-content-de"
+          BUCKET_REGION: "eu-west-1"
+          CDN_DOMAIN_PREFIX: "https://images.dog.ceo/breeds/"
   listAnyBreedImageRandom:
     Type: AWS::Serverless::Function
     Properties:
@@ -158,10 +158,10 @@ Resources:
             Method: GET
       Environment:
         Variables:
-          IMAGE_BUCKET_NAME: "IMAGE_BUCKET_NAME env var is empty"
-          FILE_BUCKET_NAME: "FILE_BUCKET_NAME env var is empty"
-          BUCKET_REGION: "BUCKET_REGION env var is empty"
-          CDN_DOMAIN_PREFIX: ""
+          IMAGE_BUCKET_NAME: "dog-ceo-stanford-files"
+          FILE_BUCKET_NAME: "dog-ceo-api-static-content-de"
+          BUCKET_REGION: "eu-west-1"
+          CDN_DOMAIN_PREFIX: "https://images.dog.ceo/breeds/"
   listAnyBreedMultiImageRandom:
     Type: AWS::Serverless::Function
     Properties:
@@ -177,10 +177,10 @@ Resources:
             Method: GET
       Environment:
         Variables:
-          IMAGE_BUCKET_NAME: "IMAGE_BUCKET_NAME env var is empty"
-          FILE_BUCKET_NAME: "FILE_BUCKET_NAME env var is empty"
-          BUCKET_REGION: "BUCKET_REGION env var is empty"
-          CDN_DOMAIN_PREFIX: ""
+          IMAGE_BUCKET_NAME: "dog-ceo-stanford-files"
+          FILE_BUCKET_NAME: "dog-ceo-api-static-content-de"
+          BUCKET_REGION: "eu-west-1"
+          CDN_DOMAIN_PREFIX: "https://images.dog.ceo/breeds/"
   listMasterBreedInfo:
     Type: AWS::Serverless::Function
     Properties:
@@ -196,10 +196,10 @@ Resources:
             Method: GET
       Environment:
         Variables:
-          IMAGE_BUCKET_NAME: "IMAGE_BUCKET_NAME env var is empty"
-          FILE_BUCKET_NAME: "FILE_BUCKET_NAME env var is empty"
-          BUCKET_REGION: "BUCKET_REGION env var is empty"
-          CDN_DOMAIN_PREFIX: ""
+          IMAGE_BUCKET_NAME: "dog-ceo-stanford-files"
+          FILE_BUCKET_NAME: "dog-ceo-api-static-content-de"
+          BUCKET_REGION: "eu-west-1"
+          CDN_DOMAIN_PREFIX: "https://images.dog.ceo/breeds/"
   listSubBreedInfo:
     Type: AWS::Serverless::Function
     Properties:
@@ -215,7 +215,7 @@ Resources:
             Method: GET
       Environment:
         Variables:
-          IMAGE_BUCKET_NAME: "IMAGE_BUCKET_NAME env var is empty"
-          FILE_BUCKET_NAME: "FILE_BUCKET_NAME env var is empty"
-          BUCKET_REGION: "BUCKET_REGION env var is empty"
-          CDN_DOMAIN_PREFIX: ""
+          IMAGE_BUCKET_NAME: "dog-ceo-stanford-files"
+          FILE_BUCKET_NAME: "dog-ceo-api-static-content-de"
+          BUCKET_REGION: "eu-west-1"
+          CDN_DOMAIN_PREFIX: "https://images.dog.ceo/breeds/"
