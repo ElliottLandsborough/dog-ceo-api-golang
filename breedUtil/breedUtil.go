@@ -253,3 +253,19 @@ func ListSubBreedImageRandom(request events.APIGatewayProxyRequest) []string {
 
 	return []string{getRandomBreedImageByBreedString(breed)}
 }
+
+func ListAnyBreedImageRandom() []string {
+	return []string{}
+}
+
+func ListAnyBreedMultiImageRandom(request events.APIGatewayProxyRequest) []string {
+	return []string{}
+}
+
+func ListMasterBreedInfo(request events.APIGatewayProxyRequest) []string {
+	return []string{}
+}
+
+func ListSubBreedInfo(request events.APIGatewayProxyRequest) []string {
+	return []string{}
+}
