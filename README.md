@@ -1,6 +1,6 @@
-# dog-ceo-api-golang
+# dog.ceo golang lambda functions
 
-The Lamba api used for the https://dog.ceo api
+The AWS Lambda functions used for the https://dog.ceo api.
 
 ## Quick start
 
