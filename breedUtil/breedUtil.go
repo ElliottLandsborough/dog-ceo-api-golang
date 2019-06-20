@@ -69,25 +69,50 @@ func ListObjectsFromS3(delimeter string, prefix string) *s3.ListObjectsV2Output 
 	return response
 }
 
-// GetAllBreedPrefixesFromS3 gets all breed prefixes from s3
-func GetAllBreedPrefixesFromS3() *s3.ListObjectsV2Output {
-	// @todo: return a normal slice here
-	return ListObjectsFromS3("/", "")
+// GetRootPrefixesFromS3 gets all breed prefixes from s3
+func GetRootPrefixesFromS3() []string {
+	return prefixesToSlice(ListObjectsFromS3("/", ""))
+}
+
+// converts listObjectsV2Output response with prefixes to string slice
+func prefixesToSlice(listObjectsV2Output *s3.ListObjectsV2Output) []string {
+	breeds := []string{}
+
+	// loop through aws result
+	for _, c := range listObjectsV2Output.CommonPrefixes {
+		breed := strings.TrimRight(*c.Prefix, "/")
+		breeds = append(breeds, breed)
+	}
+
+	return breeds
+}
+
+func getObjectsByPrefix(prefix string) []string {
+	// get all objects from prefix* on s3
+	response := ListObjectsFromS3("", prefix)
+
+	// create map of string arrays
+	objects := []string{}
+
+	// loop through results
+	for _, c := range response.Contents {
+		// append result to slice
+		objects = append(objects, *c.Key)
+	}
+
+	return objects
 }
 
 // ListAllBreeds gets all breeds (master and sub)
 func ListAllBreeds() map[string][]string {
 	// get all breeds from s3
-	response := GetAllBreedPrefixesFromS3()
+	breeds := GetRootPrefixesFromS3()
 
 	// create map of string arrays
 	twoDimensionalArray := map[string][]string{}
 
-	// loop through aws result
-	for _, c := range response.CommonPrefixes {
-		// remove the trailing slash
-		breed := strings.TrimRight(*c.Prefix, "/")
-
+	// loop through breeds
+	for _, breed := range breeds {
 		// explode by -
 		exploded := strings.Split(breed, "-")
 
@@ -127,16 +152,13 @@ func Contains(a []string, x string) bool {
 // ListBreeds gets all master breeds
 func ListBreeds() []string {
 	// get all breeds from s3
-	response := GetAllBreedPrefixesFromS3()
+	breeds := GetRootPrefixesFromS3()
 
 	// create map of string arrays
 	breedArray := []string{}
 
-	// loop through aws result
-	for _, c := range response.CommonPrefixes {
-		// remove the trailing slash
-		breed := strings.TrimRight(*c.Prefix, "/")
-
+	// loop through breeds
+	for _, breed := range breeds {
 		// explode by -
 		exploded := strings.Split(breed, "-")
 
@@ -155,16 +177,13 @@ func ListSubBreeds(request events.APIGatewayProxyRequest) []string {
 	breedRequested := request.PathParameters["breed"]
 
 	// get all breeds from s3
-	response := GetAllBreedPrefixesFromS3()
+	breeds := GetRootPrefixesFromS3()
 
 	// create map of string arrays
 	breedArray := []string{}
 
-	// loop through aws result
-	for _, c := range response.CommonPrefixes {
-		// remove the trailing slash
-		breed := strings.TrimRight(*c.Prefix, "/")
-
+	// loop through breeds
+	for _, breed := range breeds {
 		// explode by -
 		exploded := strings.Split(breed, "-")
 
@@ -187,25 +206,9 @@ func ListSubBreeds(request events.APIGatewayProxyRequest) []string {
 	return breedArray
 }
 
-func getBreedImagesByBreedString(breed string) []string {
-	// get all images of a breed from s3
-	response := ListObjectsFromS3("", breed)
-
-	// create map of string arrays
-	images := []string{}
-
-	// loop through results
-	for _, c := range response.Contents {
-		// append result to slice
-		images = append(images, *c.Key)
-	}
-
-	return images
-}
-
 func getRandomBreedImageByBreedString(breed string) string {
 	// get all images of a breed
-	images := getBreedImagesByBreedString(breed)
+	images := getObjectsByPrefix(breed)
 
 	// initialize global pseudo random generator
 	rand.Seed(time.Now().Unix())
@@ -221,7 +224,7 @@ func ListMasterBreedImages(request events.APIGatewayProxyRequest) []string {
 	// the breed from the {breed} section of url
 	breed := request.PathParameters["breed"]
 
-	return getBreedImagesByBreedString(breed)
+	return getObjectsByPrefix(breed)
 }
 
 // ListSubBreedImages gets all images from a sub breed
@@ -232,7 +235,7 @@ func ListSubBreedImages(request events.APIGatewayProxyRequest) []string {
 	subBreed := request.PathParameters["breed2"]
 	breed := masterBreed + "-" + subBreed
 
-	return getBreedImagesByBreedString(breed)
+	return getObjectsByPrefix(breed)
 }
 
 // ListMasterBreedImageRandom gets a random image from all the master breed images
