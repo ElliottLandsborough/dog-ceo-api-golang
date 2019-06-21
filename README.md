@@ -48,14 +48,9 @@ make build && make start
 ## Packaging and deployment
 
 ```shell
-sam package \
-    --output-template-file packaged.yaml \
-    --s3-bucket dog-ceo-api-golang-dev-sam
-
-sam deploy \
-    --template-file packaged.yaml \
-    --stack-name dog-ceo-api-golang-dev-sam \
-    --capabilities CAPABILITY_IAM
+make deploy
+-- OR --
+make ENVIRONMENT=production deploy
 ```
 
 ### Testing (not yet implemented)
