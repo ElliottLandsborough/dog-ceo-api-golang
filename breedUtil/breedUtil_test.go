@@ -1,7 +1,10 @@
 package lib
 
 import (
+	"reflect"
 	"testing"
+
+	"github.com/aws/aws-lambda-go/events"
 )
 
 func TestSliceContainsString(t *testing.T) {
@@ -57,5 +60,22 @@ func TestGenerateBreedYamlKey(t *testing.T) {
 	good := "breed-info/testbreedname.yaml"
 	if str != good {
 		t.Errorf("Incorrect, got: %s, want: %s.", str, good)
+	}
+}
+
+func TestJsonResponse(t *testing.T) {
+	statusCode := 418
+	json := "{ \"name\":\"John\", \"age\":30, \"car\":null }"
+
+	response := jsonResponse(statusCode, json)
+
+	wanted := events.APIGatewayProxyResponse{
+		Headers:    map[string]string{"Content-Type": "application/json"},
+		Body:       json,
+		StatusCode: statusCode,
+	}
+
+	if reflect.DeepEqual(response, wanted) != true {
+		t.Errorf("Incorrect, got: %T, want: %T.", response, wanted)
 	}
 }
