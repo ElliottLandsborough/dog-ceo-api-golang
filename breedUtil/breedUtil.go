@@ -125,7 +125,7 @@ func getObjectsByPrefix(prefix string) []string {
 	// get all objects from prefix* on s3
 	response := ListObjectsFromS3("", prefix)
 
-	// create map of string arrays
+	// slice of strings
 	objects := []string{}
 
 	// loop through results
@@ -139,8 +139,8 @@ func getObjectsByPrefix(prefix string) []string {
 	return objects
 }
 
-// contains checks if a string exists in a slice of strings
-func contains(a []string, x string) bool {
+// sliceContainsString checks if a string exists in a slice of strings
+func sliceContainsString(a []string, x string) bool {
 	for _, n := range a {
 		if x == n {
 			return true
@@ -203,21 +203,21 @@ func ListBreeds() []string {
 	// get all breeds from s3
 	breeds := GetRootPrefixesFromS3()
 
-	// create map of string arrays
-	breedArray := []string{}
+	// slice of strings
+	s := []string{}
 
 	// loop through breeds
 	for _, breed := range breeds {
 		// explode by -
 		exploded := strings.Split(breed, "-")
 
-		if !contains(breedArray, exploded[0]) {
-			// append to breeds array
-			breedArray = append(breedArray, exploded[0])
+		if !sliceContainsString(s, exploded[0]) {
+			// append to breeds
+			s = append(s, exploded[0])
 		}
 	}
 
-	return breedArray
+	return s
 }
 
 // ListSubBreeds gets all sub breeds by master breed name
@@ -228,8 +228,8 @@ func ListSubBreeds(request events.APIGatewayProxyRequest) []string {
 	// get all breeds from s3
 	breeds := GetRootPrefixesFromS3()
 
-	// create map of string arrays
-	breedArray := []string{}
+	// slice of strings
+	s := []string{}
 
 	// loop through breeds
 	for _, breed := range breeds {
@@ -247,12 +247,12 @@ func ListSubBreeds(request events.APIGatewayProxyRequest) []string {
 				sub := exploded[1]
 
 				// append item to slice
-				breedArray = append(breedArray, sub)
+				s = append(s, sub)
 			}
 		}
 	}
 
-	return breedArray
+	return s
 }
 
 func getRandomBreedImageByBreedString(breed string) string {
