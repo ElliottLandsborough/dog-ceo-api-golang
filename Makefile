@@ -26,6 +26,8 @@ clean:
 start:
 	sam local start-api --env-vars environment_variables.json
 
-deploy:
+sendtoaws:
 	sam package --output-template-file packaged.yaml --s3-bucket dog-ceo-api-golang-$(ENVSWITCH)-sam
 	sam deploy --template-file packaged.yaml --stack-name dog-ceo-api-golang-$(ENVSWITCH)-sam --capabilities CAPABILITY_IAM
+
+deploy: build sendtoaws
