@@ -1,6 +1,7 @@
 # dog.ceo golang lambda functions
 
 [![Build Status](https://travis-ci.org/ElliottLandsborough/dog-ceo-api-golang.svg?branch=master)](https://travis-ci.org/ElliottLandsborough/dog-ceo-api-golang)
+[![codecov](https://codecov.io/gh/ElliottLandsborough/dog-ceo-api-golang/branch/master/graph/badge.svg)](https://codecov.io/gh/ElliottLandsborough/dog-ceo-api-golang)
 
 The AWS Lambda functions used for the https://dog.ceo api.
 
