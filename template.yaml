@@ -26,7 +26,7 @@ Resources:
       Environment:
         Variables:
           IMAGE_BUCKET_NAME: "dog-ceo-stanford-files"
-          FILE_BUCKET_NAME: "dog-ceo-api-static-content-de"
+          FILE_BUCKET_NAME: "dog-ceo-api-static-content-dev"
           BUCKET_REGION: "eu-west-1"
           CDN_DOMAIN_PREFIX: "https://images.dog.ceo/breeds/"
   listBreeds:
@@ -45,7 +45,7 @@ Resources:
       Environment:
         Variables:
           IMAGE_BUCKET_NAME: "dog-ceo-stanford-files"
-          FILE_BUCKET_NAME: "dog-ceo-api-static-content-de"
+          FILE_BUCKET_NAME: "dog-ceo-api-static-content-dev"
           BUCKET_REGION: "eu-west-1"
           CDN_DOMAIN_PREFIX: "https://images.dog.ceo/breeds/"
   listSubBreeds:
@@ -64,7 +64,7 @@ Resources:
       Environment:
         Variables:
           IMAGE_BUCKET_NAME: "dog-ceo-stanford-files"
-          FILE_BUCKET_NAME: "dog-ceo-api-static-content-de"
+          FILE_BUCKET_NAME: "dog-ceo-api-static-content-dev"
           BUCKET_REGION: "eu-west-1"
           CDN_DOMAIN_PREFIX: "https://images.dog.ceo/breeds/"
   listMasterBreedImages:
@@ -83,7 +83,7 @@ Resources:
       Environment:
         Variables:
           IMAGE_BUCKET_NAME: "dog-ceo-stanford-files"
-          FILE_BUCKET_NAME: "dog-ceo-api-static-content-de"
+          FILE_BUCKET_NAME: "dog-ceo-api-static-content-dev"
           BUCKET_REGION: "eu-west-1"
           CDN_DOMAIN_PREFIX: "https://images.dog.ceo/breeds/"
   listSubBreedImages:
@@ -102,7 +102,7 @@ Resources:
       Environment:
         Variables:
           IMAGE_BUCKET_NAME: "dog-ceo-stanford-files"
-          FILE_BUCKET_NAME: "dog-ceo-api-static-content-de"
+          FILE_BUCKET_NAME: "dog-ceo-api-static-content-dev"
           BUCKET_REGION: "eu-west-1"
           CDN_DOMAIN_PREFIX: "https://images.dog.ceo/breeds/"
   listMasterBreedImageRandom:
@@ -121,7 +121,7 @@ Resources:
       Environment:
         Variables:
           IMAGE_BUCKET_NAME: "dog-ceo-stanford-files"
-          FILE_BUCKET_NAME: "dog-ceo-api-static-content-de"
+          FILE_BUCKET_NAME: "dog-ceo-api-static-content-dev"
           BUCKET_REGION: "eu-west-1"
           CDN_DOMAIN_PREFIX: "https://images.dog.ceo/breeds/"
   listSubBreedImageRandom:
@@ -140,7 +140,7 @@ Resources:
       Environment:
         Variables:
           IMAGE_BUCKET_NAME: "dog-ceo-stanford-files"
-          FILE_BUCKET_NAME: "dog-ceo-api-static-content-de"
+          FILE_BUCKET_NAME: "dog-ceo-api-static-content-dev"
           BUCKET_REGION: "eu-west-1"
           CDN_DOMAIN_PREFIX: "https://images.dog.ceo/breeds/"
   listAnyBreedImageRandom:
@@ -159,7 +159,7 @@ Resources:
       Environment:
         Variables:
           IMAGE_BUCKET_NAME: "dog-ceo-stanford-files"
-          FILE_BUCKET_NAME: "dog-ceo-api-static-content-de"
+          FILE_BUCKET_NAME: "dog-ceo-api-static-content-dev"
           BUCKET_REGION: "eu-west-1"
           CDN_DOMAIN_PREFIX: "https://images.dog.ceo/breeds/"
   listAnyBreedMultiImageRandom:
@@ -178,7 +178,7 @@ Resources:
       Environment:
         Variables:
           IMAGE_BUCKET_NAME: "dog-ceo-stanford-files"
-          FILE_BUCKET_NAME: "dog-ceo-api-static-content-de"
+          FILE_BUCKET_NAME: "dog-ceo-api-static-content-dev"
           BUCKET_REGION: "eu-west-1"
           CDN_DOMAIN_PREFIX: "https://images.dog.ceo/breeds/"
   listMasterBreedInfo:
@@ -197,7 +197,7 @@ Resources:
       Environment:
         Variables:
           IMAGE_BUCKET_NAME: "dog-ceo-stanford-files"
-          FILE_BUCKET_NAME: "dog-ceo-api-static-content-de"
+          FILE_BUCKET_NAME: "dog-ceo-api-static-content-dev"
           BUCKET_REGION: "eu-west-1"
           CDN_DOMAIN_PREFIX: "https://images.dog.ceo/breeds/"
   listSubBreedInfo:
@@ -216,6 +216,6 @@ Resources:
       Environment:
         Variables:
           IMAGE_BUCKET_NAME: "dog-ceo-stanford-files"
-          FILE_BUCKET_NAME: "dog-ceo-api-static-content-de"
+          FILE_BUCKET_NAME: "dog-ceo-api-static-content-dev"
           BUCKET_REGION: "eu-west-1"
           CDN_DOMAIN_PREFIX: "https://images.dog.ceo/breeds/"
