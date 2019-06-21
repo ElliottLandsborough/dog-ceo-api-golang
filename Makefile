@@ -26,8 +26,6 @@ deps:
 	go get -u github.com/aws/aws-lambda-go/events
 	go get -u github.com/aws/aws-lambda-go/lambda
 
-build: test compile
-
 test:
 	go test -v ./breedUtil -race -coverprofile=coverage.txt -covermode=atomic
 	# go test -v ./... -race -coverprofile=coverage.txt -covermode=atomic
@@ -53,4 +51,9 @@ sendtoaws:
 	sam package --output-template-file packaged.yaml --s3-bucket dog-ceo-api-golang-$(ENVSWITCH)-sam
 	sam deploy --template-file packaged.yaml --stack-name dog-ceo-api-golang-$(ENVSWITCH)-sam --capabilities CAPABILITY_IAM
 
+# make deploy
+# -- OR --
+# make ENVIRONMENT=production deploy
 deploy: test compile sendtoaws
+
+build: test compile
