@@ -3,8 +3,6 @@ ifeq ("$(ENVIRONMENT)","production")
 	ENVSWITCH=prod
 endif
 
-build: deps compile
-
 compile:
 	GOOS=linux GOARCH=amd64 go build -o bin/listAllBreeds ./listAllBreeds
 	GOOS=linux GOARCH=amd64 go build -o bin/listBreeds ./listBreeds
@@ -28,6 +26,8 @@ deps:
 	go get -u github.com/aws/aws-lambda-go/events
 	go get -u github.com/aws/aws-lambda-go/lambda
 
+build: test compile
+
 test:
 	go test -v ./breedUtil -race -coverprofile=coverage.txt -covermode=atomic
 	# go test -v ./... -race -coverprofile=coverage.txt -covermode=atomic
@@ -35,6 +35,15 @@ test:
 clean:
 	rm -rf ./bin/listAllBreeds
 	rm -rf ./bin/listBreeds
+	rm -rf ./bin/listSubBreeds
+	rm -rf ./bin/listMasterBreedImages
+	rm -rf ./bin/listSubBreedImages
+	rm -rf ./bin/listMasterBreedImageRandom
+	rm -rf ./bin/listSubBreedImageRandom
+	rm -rf ./bin/listAnyBreedImageRandom
+	rm -rf ./bin/listAnyBreedMultiImageRandom
+	rm -rf ./bin/listMasterBreedInfo
+	rm -rf ./bin/listSubBreedInfo
 
 start:
 	sam local start-api
