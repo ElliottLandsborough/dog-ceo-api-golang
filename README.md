@@ -58,7 +58,7 @@ make ENVIRONMENT=production deploy
 We use `testing` package that is built-in in Golang and you can simply run the following command to run our tests:
 
 ```shell
-go test -v ./hello-world/
+make test
 ```
 
 ### Example environment_variables.json
