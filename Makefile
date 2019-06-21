@@ -29,8 +29,8 @@ deps:
 	go get -u github.com/aws/aws-lambda-go/lambda
 
 test:
-	go test -v ./breedUtil
-	# go test -v ./...
+	go test -v ./breedUtil -race -coverprofile=coverage.txt -covermode=atomic
+	# go test -v ./... -race -coverprofile=coverage.txt -covermode=atomic
 
 clean:
 	rm -rf ./bin/listAllBreeds
