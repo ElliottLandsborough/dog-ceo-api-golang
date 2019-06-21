@@ -9,11 +9,11 @@ Old version in node: https://github.com/ElliottLandsborough/dog-ceo-api-node
 
 ## Quick start
 
-```
-$ make deps
-$ make clean
-$ make build
-$ make start
+```shell
+make deps
+make clean
+make build
+make start
 ```
 
 ## Requirements
@@ -27,12 +27,17 @@ $ make start
 ### Dependencies
 
 ```shell
-go get -u github.com/aws/aws-lambda-go/...
-go get -u github.com/aws/aws-sdk-go
-go get github.com/ghodss/yaml
+go get -u github.com/aws/aws-lambda-go/events
+go get -u github.com/aws/aws-sdk-go/aws
+go get -u github.com/aws/aws-sdk-go/aws/awserr
+go get -u github.com/aws/aws-sdk-go/aws/session
+go get -u github.com/aws/aws-sdk-go/service/s3
+go get -u github.com/ghodss/yaml
+go get -u github.com/aws/aws-lambda-go/events
+go get -u github.com/aws/aws-lambda-go/lambda
 ```
 
-### Building
+### Compiling
 
 ```shell
 make
@@ -56,7 +61,7 @@ make deploy
 make ENVIRONMENT=production deploy
 ```
 
-### Testing (not yet implemented)
+### Testing
 
 We use `testing` package that is built-in in Golang and you can simply run the following command to run our tests:
 
@@ -68,13 +73,13 @@ make test
 ```json
 {
   "listAllBreeds": {
-  	"IMAGE_BUCKET_NAME": "dog-ceo-stanford-files",
+    "IMAGE_BUCKET_NAME": "dog-ceo-stanford-files",
     "FILE_BUCKET_NAME": "dog-ceo-api-static-content-dev",
     "BUCKET_REGION": "eu-west-1",
     "CDN_DOMAIN_PREFIX": "https://images.dog.ceo/breeds/"
   },
   "listBreeds": {
-  	"IMAGE_BUCKET_NAME": "dog-ceo-stanford-files",
+    "IMAGE_BUCKET_NAME": "dog-ceo-stanford-files",
     "FILE_BUCKET_NAME": "dog-ceo-api-static-content-dev",
     "BUCKET_REGION": "eu-west-1",
     "CDN_DOMAIN_PREFIX": "https://images.dog.ceo/breeds/"
