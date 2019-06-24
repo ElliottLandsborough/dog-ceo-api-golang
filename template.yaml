@@ -29,11 +29,11 @@ Resources:
           FILE_BUCKET_NAME: "dog-ceo-api-static-content-dev"
           BUCKET_REGION: "eu-west-1"
           CDN_DOMAIN_PREFIX: "https://images.dog.ceo/breeds/"
-  listBreeds:
+  listMasterBreeds:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: bin/
-      Handler: listBreeds
+      Handler: listMasterBreeds
       Runtime: go1.x
       Role: arn:aws:iam::633322954385:role/dog-ceo-api-golang-dev-sam
       Events:
