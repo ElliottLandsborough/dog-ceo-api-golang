@@ -4,9 +4,8 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 
-	awsUtil "../awsUtil"
-	breedUtil "../breedUtil"
-	lambdaResponseUtil "../lambdaResponseUtil"
+	awsUtil "../../libraries/aws"
+	lambdaResponseUtil "../../libraries/response"
 )
 
 func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
@@ -16,8 +15,7 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	subBreed := request.PathParameters["breed2"]
 	breed := masterBreed + "-" + subBreed
 
-	images := awsUtil.GetObjectsByPrefix(breed)
-	result := breedUtil.ListBreedImageRandom(images)
+	result := awsUtil.GetObjectsByPrefix(breed)
 
 	return lambdaResponseUtil.ImageResponseOneDimensional(result), nil
 }

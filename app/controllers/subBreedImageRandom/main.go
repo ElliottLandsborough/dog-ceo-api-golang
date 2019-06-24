@@ -4,9 +4,9 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 
-	awsUtil "../awsUtil"
-	breedUtil "../breedUtil"
-	lambdaResponseUtil "../lambdaResponseUtil"
+	awsUtil "../../libraries/aws"
+	breedUtil "../../libraries/breed"
+	lambdaResponseUtil "../../libraries/response"
 )
 
 func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
@@ -16,17 +16,10 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	subBreed := request.PathParameters["breed2"]
 	breed := masterBreed + "-" + subBreed
 
-	key := breedUtil.GenerateBreedYamlKey(breed)
-	object, err := awsUtil.GetObjectFromS3(key)
+	images := awsUtil.GetObjectsByPrefix(breed)
+	result := breedUtil.ListBreedImageRandom(images)
 
-	if err != nil {
-		return lambdaResponseUtil.KeyNotFoundErrorResponse(), nil
-	}
-
-	yaml := awsUtil.GetObjectContents(object)
-	json := breedUtil.ParseYamlToJSON(yaml)
-
-	return lambdaResponseUtil.InfoResponseFromString(json), nil
+	return lambdaResponseUtil.ImageResponseOneDimensional(result), nil
 }
 
 func main() {

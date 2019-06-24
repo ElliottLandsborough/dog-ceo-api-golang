@@ -4,17 +4,17 @@ ifeq ("$(ENVIRONMENT)","production")
 endif
 
 compile:
-	GOOS=linux GOARCH=amd64 go build -o bin/listAllBreeds ./listAllBreeds
-	GOOS=linux GOARCH=amd64 go build -o bin/listBreeds ./listBreeds
-	GOOS=linux GOARCH=amd64 go build -o bin/listSubBreeds ./listSubBreeds
-	GOOS=linux GOARCH=amd64 go build -o bin/listMasterBreedImages ./listMasterBreedImages
-	GOOS=linux GOARCH=amd64 go build -o bin/listSubBreedImages ./listSubBreedImages
-	GOOS=linux GOARCH=amd64 go build -o bin/listMasterBreedImageRandom ./listMasterBreedImageRandom
-	GOOS=linux GOARCH=amd64 go build -o bin/listSubBreedImageRandom ./listSubBreedImageRandom
-	GOOS=linux GOARCH=amd64 go build -o bin/listAnyBreedImageRandom ./listAnyBreedImageRandom
-	GOOS=linux GOARCH=amd64 go build -o bin/listAnyBreedMultiImageRandom ./listAnyBreedMultiImageRandom
-	GOOS=linux GOARCH=amd64 go build -o bin/listMasterBreedInfo ./listMasterBreedInfo
-	GOOS=linux GOARCH=amd64 go build -o bin/listSubBreedInfo ./listSubBreedInfo
+	GOOS=linux GOARCH=amd64 go build -o bin/allBreeds ./app/controllers/allBreeds
+	GOOS=linux GOARCH=amd64 go build -o bin/masterBreeds ./app/controllers/masterBreeds
+	GOOS=linux GOARCH=amd64 go build -o bin/subBreeds ./app/controllers/subBreeds
+	GOOS=linux GOARCH=amd64 go build -o bin/masterBreedImages ./app/controllers/masterBreedImages
+	GOOS=linux GOARCH=amd64 go build -o bin/subBreedImages ./app/controllers/subBreedImages
+	GOOS=linux GOARCH=amd64 go build -o bin/masterBreedImageRandom ./app/controllers/masterBreedImageRandom
+	GOOS=linux GOARCH=amd64 go build -o bin/subBreedImageRandom ./app/controllers/subBreedImageRandom
+	GOOS=linux GOARCH=amd64 go build -o bin/anyBreedImageRandom ./app/controllers/anyBreedImageRandom
+	GOOS=linux GOARCH=amd64 go build -o bin/anyBreedMultiImageRandom ./app/controllers/anyBreedMultiImageRandom
+	GOOS=linux GOARCH=amd64 go build -o bin/masterBreedInfo ./app/controllers/masterBreedInfo
+	GOOS=linux GOARCH=amd64 go build -o bin/subBreedInfo ./app/controllers/subBreedInfo
 
 deps:
 	go get -u github.com/aws/aws-lambda-go/events
@@ -30,17 +30,17 @@ test:
 	go test -v ./... -race -coverprofile=coverage.txt -covermode=atomic
 
 clean:
-	rm -rf ./bin/listAllBreeds
-	rm -rf ./bin/listBreeds
-	rm -rf ./bin/listSubBreeds
-	rm -rf ./bin/listMasterBreedImages
-	rm -rf ./bin/listSubBreedImages
-	rm -rf ./bin/listMasterBreedImageRandom
-	rm -rf ./bin/listSubBreedImageRandom
-	rm -rf ./bin/listAnyBreedImageRandom
-	rm -rf ./bin/listAnyBreedMultiImageRandom
-	rm -rf ./bin/listMasterBreedInfo
-	rm -rf ./bin/listSubBreedInfo
+	rm -rf ./bin/allBreeds
+	rm -rf ./bin/masterBreeds
+	rm -rf ./bin/subBreeds
+	rm -rf ./bin/masterBreedImages
+	rm -rf ./bin/subBreedImages
+	rm -rf ./bin/masterBreedImageRandom
+	rm -rf ./bin/subBreedImageRandom
+	rm -rf ./bin/anyBreedImageRandom
+	rm -rf ./bin/anyBreedMultiImageRandom
+	rm -rf ./bin/masterBreedInfo
+	rm -rf ./bin/subBreedInfo
 
 start:
 	sam local start-api
@@ -56,3 +56,5 @@ sendtoaws:
 deploy: test compile sendtoaws
 
 build: test compile
+
+fullstart: clean compile test start
