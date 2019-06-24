@@ -1,143 +1,14 @@
 package lib
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
 	"math/rand"
-	"os"
 	"strconv"
 	"strings"
 	"time"
 
-	"github.com/aws/aws-lambda-go/events"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/awserr"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/ghodss/yaml"
 )
-
-// ListObjectsFromS3 gets all the breed fixes from s3
-func ListObjectsFromS3(delimeter string, prefix string) *s3.ListObjectsV2Output {
-	bucket := os.Getenv("IMAGE_BUCKET_NAME")
-
-	sess, err := session.NewSession(&aws.Config{
-		Region: aws.String(os.Getenv("BUCKET_REGION"))},
-	)
-
-	svc := s3.New(sess)
-
-	input := &s3.ListObjectsV2Input{
-		Bucket:    aws.String(bucket),
-		Delimiter: aws.String(delimeter),
-		Prefix:    aws.String(prefix),
-		MaxKeys:   aws.Int64(1000000),
-	}
-
-	response, err := svc.ListObjectsV2(input)
-
-	// handle the error...
-	if err != nil {
-		if aerr, ok := err.(awserr.Error); ok {
-			switch aerr.Code() {
-			case s3.ErrCodeNoSuchBucket:
-				fmt.Println(aerr.Error())
-				os.Exit(1)
-			case s3.ErrCodeNoSuchKey:
-				fmt.Println(aerr.Error())
-			default:
-				fmt.Println(aerr.Error())
-			}
-		} else {
-			fmt.Println(err.Error())
-		}
-	}
-
-	return response
-}
-
-func getObjectFromS3(key string) (*s3.GetObjectOutput, error) {
-	bucket := os.Getenv("FILE_BUCKET_NAME")
-
-	sess, err := session.NewSession(&aws.Config{
-		Region: aws.String(os.Getenv("BUCKET_REGION"))},
-	)
-
-	svc := s3.New(sess)
-
-	input := &s3.GetObjectInput{
-		Bucket: aws.String(bucket),
-		Key:    aws.String(key),
-	}
-
-	response, err := svc.GetObject(input)
-
-	// handle the error...
-	if err != nil {
-		if aerr, ok := err.(awserr.Error); ok {
-			switch aerr.Code() {
-			case s3.ErrCodeNoSuchBucket:
-				fmt.Println(aerr.Error())
-				os.Exit(1)
-			case s3.ErrCodeNoSuchKey:
-				fmt.Println(aerr.Error())
-				return nil, aerr
-			default:
-				fmt.Println(aerr.Error())
-			}
-		} else {
-			fmt.Println(err.Error())
-		}
-	}
-
-	return response, err
-}
-
-func getObjectContents(object *s3.GetObjectOutput) string {
-	buf := new(bytes.Buffer)
-	buf.ReadFrom(object.Body)
-	s := buf.String() // Does a complete copy of the bytes in the buffer.
-
-	return s
-}
-
-// GetRootPrefixesFromS3 gets all breed prefixes from s3
-func GetRootPrefixesFromS3() []string {
-	return prefixesToSlice(ListObjectsFromS3("/", ""))
-}
-
-// converts listObjectsV2Output response with prefixes to string slice
-func prefixesToSlice(listObjectsV2Output *s3.ListObjectsV2Output) []string {
-	breeds := []string{}
-
-	// loop through aws result
-	for _, c := range listObjectsV2Output.CommonPrefixes {
-		breed := strings.TrimRight(*c.Prefix, "/")
-		breeds = append(breeds, breed)
-	}
-
-	return breeds
-}
-
-// get objects from s3 which start with string
-func getObjectsByPrefix(prefix string) []string {
-	// get all objects from prefix* on s3
-	response := ListObjectsFromS3("", prefix)
-
-	// slice of strings
-	objects := []string{}
-
-	// loop through results
-	for _, c := range response.Contents {
-		cdn := os.Getenv("CDN_DOMAIN_PREFIX")
-		url := cdn + *c.Key
-		// append result to slice
-		objects = append(objects, url)
-	}
-
-	return objects
-}
 
 // sliceContainsString checks if a string exists in a slice of strings
 func sliceContainsString(a []string, x string) bool {
@@ -149,7 +20,8 @@ func sliceContainsString(a []string, x string) bool {
 	return false
 }
 
-func getRandomItemFromSliceString(slice []string) string {
+// GetRandomItemFromSliceString gets a random item from a slice of strings
+func GetRandomItemFromSliceString(slice []string) string {
 	// initialize global pseudo random generator
 	rand.Seed(time.Now().Unix())
 
@@ -157,16 +29,8 @@ func getRandomItemFromSliceString(slice []string) string {
 	return slice[rand.Intn(len(slice))]
 }
 
-// get all breeds from s3 and pick a random one
-func getRandomPrefix() string {
-	return getRandomItemFromSliceString(GetRootPrefixesFromS3())
-}
-
 // ListAllBreeds gets all breeds (master and sub)
-func ListAllBreeds() map[string][]string {
-	// get all breeds from s3
-	breeds := GetRootPrefixesFromS3()
-
+func ListAllBreeds(breeds []string) map[string][]string {
 	// create map of string arrays
 	twoDimensionalArray := map[string][]string{}
 
@@ -198,11 +62,8 @@ func ListAllBreeds() map[string][]string {
 	return twoDimensionalArray
 }
 
-// ListBreeds gets all master breeds
-func ListBreeds() []string {
-	// get all breeds from s3
-	breeds := GetRootPrefixesFromS3()
-
+// ListMasterBreeds gets all master breeds
+func ListMasterBreeds(breeds []string) []string {
 	// slice of strings
 	s := []string{}
 
@@ -221,12 +82,7 @@ func ListBreeds() []string {
 }
 
 // ListSubBreeds gets all sub breeds by master breed name
-func ListSubBreeds(request events.APIGatewayProxyRequest) []string {
-	// the breed from the {breed} section of url
-	breedRequested := request.PathParameters["breed1"]
-
-	// get all breeds from s3
-	breeds := GetRootPrefixesFromS3()
+func ListSubBreeds(breedFromURL string, breeds []string) []string {
 
 	// slice of strings
 	s := []string{}
@@ -240,7 +96,7 @@ func ListSubBreeds(request events.APIGatewayProxyRequest) []string {
 		primary := exploded[0]
 
 		// does the url segment match this item?
-		if breedRequested == primary {
+		if breedFromURL == primary {
 			// sub breed exists?
 			if len(exploded) > 1 {
 				// sub will always be 1
@@ -253,16 +109,6 @@ func ListSubBreeds(request events.APIGatewayProxyRequest) []string {
 	}
 
 	return s
-}
-
-func getRandomBreedImageByBreedString(breed string) string {
-	// get all images of a breed
-	images := getObjectsByPrefix(breed)
-
-	// pick random image from slice
-	image := getRandomItemFromSliceString(images)
-
-	return image
 }
 
 // stringSlicesAreEqual tells whether a and b contain the same elements.
@@ -304,82 +150,33 @@ func getMultipleRandomItemsFromSliceString(slice []string, amount int) []string 
 	return slice[0:amount]
 }
 
-// ListMasterBreedImages gets all images from a master breed
-func ListMasterBreedImages(request events.APIGatewayProxyRequest) []string {
-	// the breed from the {breed} section of url
-	breed := request.PathParameters["breed1"]
+// ListBreedImageRandom gets a random image from all the master breed images
+func ListBreedImageRandom(images []string) []string {
+	// pick random image from slice
+	image := GetRandomItemFromSliceString(images)
 
-	return getObjectsByPrefix(breed)
-}
-
-// ListSubBreedImages gets all images from a sub breed
-func ListSubBreedImages(request events.APIGatewayProxyRequest) []string {
-	// the breed from the {breed1} section of url
-	masterBreed := request.PathParameters["breed1"]
-	// the breed from the {breed2} section of url
-	subBreed := request.PathParameters["breed2"]
-	breed := masterBreed + "-" + subBreed
-
-	return getObjectsByPrefix(breed)
-}
-
-// ListMasterBreedImageRandom gets a random image from all the master breed images
-func ListMasterBreedImageRandom(request events.APIGatewayProxyRequest) []string {
-	// the breed from the {breed} section of url
-	breed := request.PathParameters["breed1"]
-
-	return []string{getRandomBreedImageByBreedString(breed)}
-}
-
-// ListSubBreedImageRandom gets a random image from all the sub breed images
-func ListSubBreedImageRandom(request events.APIGatewayProxyRequest) []string {
-	// the breed from the {breed1} section of url
-	masterBreed := request.PathParameters["breed1"]
-	// the breed from the {breed2} section of url
-	subBreed := request.PathParameters["breed2"]
-	breed := masterBreed + "-" + subBreed
-
-	return []string{getRandomBreedImageByBreedString(breed)}
-}
-
-// ListAnyBreedImageRandom gets random breed, gets all images, returns random image
-func ListAnyBreedImageRandom() []string {
-	return []string{getRandomBreedImageByBreedString(getRandomPrefix())}
+	return []string{image}
 }
 
 // ListAnyBreedMultiImageRandom gets all images from a random breed, returns {count} images
-func ListAnyBreedMultiImageRandom(request events.APIGatewayProxyRequest) []string {
-	s := request.PathParameters["count"]
-
+func ListAnyBreedMultiImageRandom(slice []string, count string) []string {
 	// string to int
-	i, err := strconv.Atoi(s)
+	i, err := strconv.Atoi(count)
 	if err != nil {
 		// handle error
 		i = 1
 	}
 
-	return getMultipleRandomItemsFromSliceString(getObjectsByPrefix(getRandomPrefix()), i)
+	return getMultipleRandomItemsFromSliceString(slice, i)
 }
 
-func generateBreedYamlKey(breed string) string {
+// GenerateBreedYamlKey generates the breeds yaml key
+func GenerateBreedYamlKey(breed string) string {
 	return "breed-info/" + breed + ".yaml"
 }
 
-func getBreedInfo(breed string) (string, error) {
-	key := generateBreedYamlKey(breed)
-	object, err := getObjectFromS3(key)
-
-	if err != nil {
-		return "{}", err
-	}
-
-	yaml := getObjectContents(object)
-	json := parseYamlToJSON(yaml)
-
-	return json, nil
-}
-
-func parseYamlToJSON(yamlString string) string {
+// ParseYamlToJSON takes a yaml string, returns a JSON string
+func ParseYamlToJSON(yamlString string) string {
 
 	data, err := yaml.YAMLToJSON([]byte(yamlString))
 	if err != nil {
@@ -388,107 +185,4 @@ func parseYamlToJSON(yamlString string) string {
 	}
 
 	return string(data)
-}
-
-// ListMasterBreedInfo gets the yaml file from s3 and converts it to json
-func ListMasterBreedInfo(request events.APIGatewayProxyRequest) (string, error) {
-	// the breed from the {breed} section of url
-	breed := request.PathParameters["breed1"]
-
-	info, err := getBreedInfo(breed)
-
-	return info, err
-}
-
-// ListSubBreedInfo gets the yaml file from s3 and converts it to json
-func ListSubBreedInfo(request events.APIGatewayProxyRequest) (string, error) {
-	// the breed from the {breed1} section of url
-	masterBreed := request.PathParameters["breed1"]
-	// the breed from the {breed2} section of url
-	subBreed := request.PathParameters["breed2"]
-	breed := masterBreed + "-" + subBreed
-
-	info, err := getBreedInfo(breed)
-
-	return info, err
-}
-
-// returns a json response with status code
-func jsonResponse(statusCode int, json string) events.APIGatewayProxyResponse {
-	return events.APIGatewayProxyResponse{
-		Headers:    map[string]string{"Content-Type": "application/json"},
-		Body:       json,
-		StatusCode: statusCode,
-	}
-}
-
-// BreedResponseOneDimensional returns a json response
-func BreedResponseOneDimensional(data []string) events.APIGatewayProxyResponse {
-	successData := map[string]interface{}{
-		"status":  "success",
-		"message": data,
-	}
-
-	resultJSON, _ := json.Marshal(successData)
-
-	return jsonResponse(200, string(resultJSON))
-}
-
-// BreedResponseTwoDimensional returns a json response
-func BreedResponseTwoDimensional(data map[string][]string) events.APIGatewayProxyResponse {
-	successData := map[string]interface{}{
-		"status":  "success",
-		"message": data,
-	}
-
-	resultJSON, _ := json.Marshal(successData)
-
-	return jsonResponse(200, string(resultJSON))
-}
-
-// ImageResponseOneDimensional returns a json response
-func ImageResponseOneDimensional(data []string) events.APIGatewayProxyResponse {
-	successData := map[string]interface{}{
-		"status":  "success",
-		"message": data,
-	}
-
-	resultJSON, _ := json.Marshal(successData)
-
-	return jsonResponse(200, string(resultJSON))
-}
-
-// InfoResponseFromString returns a json response
-func InfoResponseFromString(data string) events.APIGatewayProxyResponse {
-	byt := []byte(data)
-
-	var dat map[string]interface{}
-
-	if err := json.Unmarshal(byt, &dat); err != nil {
-		fail := map[string]interface{}{
-			"status":  "error",
-			"message": "data is badly formatted",
-		}
-		failJSON, _ := json.Marshal(fail)
-		return jsonResponse(500, string(failJSON))
-	}
-
-	successData := map[string]interface{}{
-		"status":  "success",
-		"message": dat,
-	}
-
-	resultJSON, _ := json.Marshal(successData)
-
-	return jsonResponse(200, string(resultJSON))
-}
-
-// KeyNotFoundErrorResponse is what happens when a breed doesnt exist
-func KeyNotFoundErrorResponse() events.APIGatewayProxyResponse {
-	fail := map[string]interface{}{
-		"status":  "error",
-		"message": "Breed not found.",
-	}
-	failJSON, _ := json.Marshal(fail)
-	return jsonResponse(404, string(failJSON))
 }

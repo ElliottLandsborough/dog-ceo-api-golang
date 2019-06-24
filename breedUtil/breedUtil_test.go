@@ -3,8 +3,6 @@ package lib
 import (
 	"reflect"
 	"testing"
-
-	"github.com/aws/aws-lambda-go/events"
 )
 
 func TestSliceContainsString(t *testing.T) {
@@ -17,9 +15,39 @@ func TestSliceContainsString(t *testing.T) {
 
 func TestGetRandomItemFromSliceString(t *testing.T) {
 	s := []string{"string1"}
-	result := getRandomItemFromSliceString(s)
+	result := GetRandomItemFromSliceString(s)
 	if result != "string1" {
 		t.Errorf("Incorrect, got: %s, want: %s.", result, "string1")
+	}
+}
+
+func TestListAllBreeds(t *testing.T) {
+	breeds := []string{"affenpinscher", "spaniel", "spaniel-cocker"}
+	got := ListAllBreeds(breeds)
+	expected := map[string][]string{
+		"affenpinscher": []string{},
+		"spaniel":       []string{"cocker"},
+	}
+	if reflect.DeepEqual(got, expected) != true {
+		t.Errorf("Incorrect, got: %s, want: %s.", got, expected)
+	}
+}
+
+func TestListMasterBreeds(t *testing.T) {
+	breeds := []string{"affenpinscher", "spaniel", "spaniel-cocker"}
+	got := ListMasterBreeds(breeds)
+	expected := []string{"affenpinscher", "spaniel"}
+	if stringSlicesAreEqual(got, expected) == false {
+		t.Errorf("Incorrect, got: %s, want: %s.", got, expected)
+	}
+}
+
+func TestListSubBreeds(t *testing.T) {
+	breeds := []string{"affenpinscher", "spaniel", "spaniel-cocker"}
+	got := ListSubBreeds("spaniel", breeds)
+	expected := []string{"cocker"}
+	if stringSlicesAreEqual(got, expected) == false {
+		t.Errorf("Incorrect, got: %s, want: %s.", got, expected)
 	}
 }
 
@@ -55,27 +83,39 @@ func TestGetMultipleRandomItemsFromSliceString(t *testing.T) {
 	}
 }
 
+func TestListBreedImageRandom(t *testing.T) {
+	images := []string{"image1.jpg"}
+
+	if stringSlicesAreEqual(ListBreedImageRandom(images), images) == false {
+		t.Errorf("Incorrect, got: %s, want: %s.", "false", "true")
+	}
+}
+
+func TestListAnyBreedMultiImageRandom(t *testing.T) {
+	images := []string{"image1.jpg", "image1.jpg", "image1.jpg"}
+	result := ListAnyBreedMultiImageRandom(images, "2")
+	expected := []string{"image1.jpg", "image1.jpg"}
+
+	if stringSlicesAreEqual(result, expected) == false {
+		t.Errorf("Incorrect, got: %s, want: %s.", "false", "true")
+	}
+}
+
 func TestGenerateBreedYamlKey(t *testing.T) {
-	str := generateBreedYamlKey("testbreedname")
+	str := GenerateBreedYamlKey("testbreedname")
 	good := "breed-info/testbreedname.yaml"
 	if str != good {
 		t.Errorf("Incorrect, got: %s, want: %s.", str, good)
 	}
 }
 
-func TestJsonResponse(t *testing.T) {
-	statusCode := 418
-	json := "{ \"name\":\"John\", \"age\":30, \"car\":null }"
-
-	response := jsonResponse(statusCode, json)
-
-	wanted := events.APIGatewayProxyResponse{
-		Headers:    map[string]string{"Content-Type": "application/json"},
-		Body:       json,
-		StatusCode: statusCode,
-	}
-
-	if reflect.DeepEqual(response, wanted) != true {
-		t.Errorf("Incorrect, got: %T, want: %T.", response, wanted)
+func TestParseYamlToJSON(t *testing.T) {
+	yaml := `item:
+  - subkey1: "string1"
+  - subkey2: "string2"`
+	result := ParseYamlToJSON(yaml)
+	expected := `{"item":[{"subkey1":"string1"},{"subkey2":"string2"}]}`
+	if result != expected {
+		t.Errorf("Incorrect, got: %s, want: %s.", result, expected)
 	}
 }
