@@ -10,7 +10,7 @@ import (
 )
 
 func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	rootPrefixes := awsUtil.GetRootPrefixesFromS3()
+	rootPrefixes := awsUtil.GetRootPrefixes()
 	breed := breedUtil.GetRandomItemFromSliceString(rootPrefixes)
 	images := awsUtil.GetObjectsByPrefix(breed)
 	result := breedUtil.ListBreedImageRandom(images)

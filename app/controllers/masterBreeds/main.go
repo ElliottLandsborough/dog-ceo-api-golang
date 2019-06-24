@@ -10,7 +10,7 @@ import (
 )
 
 func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	slice := awsUtil.GetRootPrefixesFromS3()
+	slice := awsUtil.GetRootPrefixes()
 	result := breedUtil.ListMasterBreeds(slice)
 	return lambdaResponseUtil.BreedResponseOneDimensional(result), nil
 }

@@ -12,8 +12,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 )
 
-// ListObjectsFromS3 search s3 for objects with delimeter, string or both
-func ListObjectsFromS3(delimeter string, prefix string) *s3.ListObjectsV2Output {
+// ListObjects search s3 for objects with delimeter, string or both
+func ListObjects(delimeter string, prefix string) *s3.ListObjectsV2Output {
 	bucket := os.Getenv("IMAGE_BUCKET_NAME")
 
 	sess, err := session.NewSession(&aws.Config{
@@ -51,8 +51,8 @@ func ListObjectsFromS3(delimeter string, prefix string) *s3.ListObjectsV2Output 
 	return response
 }
 
-// GetObjectFromS3 gets obect from s3 which matches 'key'
-func GetObjectFromS3(key string) (*s3.GetObjectOutput, error) {
+// GetObject gets obect from s3 which matches 'key'
+func GetObject(key string) (*s3.GetObjectOutput, error) {
 	bucket := os.Getenv("FILE_BUCKET_NAME")
 
 	sess, err := session.NewSession(&aws.Config{
@@ -111,15 +111,15 @@ func PrefixesToSlice(listObjectsV2Output *s3.ListObjectsV2Output) []string {
 	return prefixes
 }
 
-// GetRootPrefixesFromS3 gets all root prefixes from s3
-func GetRootPrefixesFromS3() []string {
-	return PrefixesToSlice(ListObjectsFromS3("/", ""))
+// GetRootPrefixes gets all root prefixes from s3
+func GetRootPrefixes() []string {
+	return PrefixesToSlice(ListObjects("/", ""))
 }
 
 // GetObjectsByPrefix gets objects from s3 which start with string
 func GetObjectsByPrefix(prefix string) []string {
 	// get all objects from prefix* on s3
-	response := ListObjectsFromS3("", prefix)
+	response := ListObjects("", prefix)
 
 	// slice of strings
 	objects := []string{}

@@ -11,7 +11,7 @@ import (
 
 func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	// get all breeds from s3
-	breeds := awsUtil.GetRootPrefixesFromS3()
+	breeds := awsUtil.GetRootPrefixes()
 
 	// the breed from the {breed} section of url
 	breed := request.PathParameters["breed1"]

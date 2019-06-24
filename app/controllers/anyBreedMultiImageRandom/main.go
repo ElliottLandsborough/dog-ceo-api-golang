@@ -10,7 +10,7 @@ import (
 )
 
 func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	rootPrefixes := awsUtil.GetRootPrefixesFromS3()
+	rootPrefixes := awsUtil.GetRootPrefixes()
 	randomPrefix := breedUtil.GetRandomItemFromSliceString(rootPrefixes)
 	slice := awsUtil.GetObjectsByPrefix(randomPrefix)
 	count := request.PathParameters["count"]
