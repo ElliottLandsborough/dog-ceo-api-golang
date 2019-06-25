@@ -144,3 +144,14 @@ func TestParseYamlToJSON(t *testing.T) {
 		t.Errorf("Incorrect, got: %s, want: %s.", result2, expected2)
 	}
 }
+
+func TestPrependStringToAllSliceStrings(t *testing.T) {
+	images := []string{"image1.jpg", "image2.jpg"}
+	prefix := "http://website.com"
+	expected := []string{prefix + "image1.jpg", prefix + "image2.jpg"}
+	got := PrependStringToAllSliceStrings(images, prefix)
+
+	if stringSlicesAreEqual(expected, got) == false {
+		t.Errorf("Incorrect, got: %s, want: %s.", got, expected)
+	}
+}

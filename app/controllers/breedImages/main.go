@@ -18,7 +18,7 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	breed := breedUtil.GetBreedFromPathParams(request.PathParameters)
 
-	result := aws.GetObjectsByPrefix(svc, bucket, breed)
+	result := breedUtil.PrependStringToAllSliceStrings(aws.GetObjectsByDelimeterAndPrefix(svc, bucket, "", breed), os.Getenv("CDN_DOMAIN_PREFIX"))
 
 	return response.ImageResponseOneDimensional(result), nil
 }

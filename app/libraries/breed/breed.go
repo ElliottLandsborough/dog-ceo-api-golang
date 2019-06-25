@@ -204,3 +204,14 @@ func GetBreedFromPathParams(PathParameters map[string]string) string {
 
 	return breed
 }
+
+// PrependStringToAllSliceStrings prepends a string to all strings in the slice
+func PrependStringToAllSliceStrings(slice []string, suffix string) []string {
+	result := []string{}
+
+	for _, s := range slice {
+		result = append(result, suffix+s)
+	}
+
+	return result
+}

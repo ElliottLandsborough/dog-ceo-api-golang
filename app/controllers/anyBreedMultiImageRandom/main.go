@@ -16,9 +16,9 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	svc, _ := aws.S3svc(region)
 	bucket := os.Getenv("IMAGE_BUCKET_NAME")
 
-	rootPrefixes := aws.GetRootPrefixes(svc, bucket)
+	rootPrefixes := aws.GetObjectsByDelimeterAndPrefix(svc, bucket, "/", "")
 	randomPrefix := breed.GetRandomItemFromSliceString(rootPrefixes)
-	slice := aws.GetObjectsByPrefix(svc, bucket, randomPrefix)
+	slice := breed.PrependStringToAllSliceStrings(aws.GetObjectsByDelimeterAndPrefix(svc, bucket, "", randomPrefix), os.Getenv("CDN_DOMAIN_PREFIX"))
 	count := request.PathParameters["count"]
 	result := breed.ListAnyBreedMultiImageRandom(slice, count)
 

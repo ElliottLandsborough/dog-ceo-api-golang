@@ -2,7 +2,6 @@ package lib
 
 import (
 	"bytes"
-	"os"
 	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -65,47 +64,9 @@ func PrefixesToSlice(listObjectsV2Output *s3.ListObjectsV2Output) []string {
 	return prefixes
 }
 
-// GetRootPrefixes gets all root prefixes from s3
-func GetRootPrefixes(svc *s3.S3, bucket string) []string {
-	/*
-	   // handle the error...
-	   if err != nil {
-	   	if aerr, ok := err.(awserr.Error); ok {
-	   		switch aerr.Code() {
-	   		case s3.ErrCodeNoSuchBucket:
-	   			fmt.Println(aerr.Error())
-	   			os.Exit(1)
-	   		case s3.ErrCodeNoSuchKey:
-	   			fmt.Println(aerr.Error())
-	   		default:
-	   			fmt.Println(aerr.Error())
-	   		}
-	   	} else {
-	   		fmt.Println(err.Error())
-	   	}
-	   }
-	*/
-	input := ObjectsV2InputGen(bucket, "/", "")
+// GetObjectsByDelimeterAndPrefix gets objects from s3 which start with string
+func GetObjectsByDelimeterAndPrefix(svc *s3.S3, bucket string, delimeter string, prefix string) []string {
+	input := ObjectsV2InputGen(bucket, "", prefix)
 	objects, _ := svc.ListObjectsV2(input)
 	return PrefixesToSlice(objects)
-}
-
-// GetObjectsByPrefix gets objects from s3 which start with string
-func GetObjectsByPrefix(svc *s3.S3, bucket string, prefix string) []string {
-	input := ObjectsV2InputGen(bucket, "", prefix)
-	response, _ := svc.ListObjectsV2(input)
-
-	// slice of strings
-	objects := []string{}
-
-	// loop through results
-	for _, c := range response.Contents {
-		// todo: split this into separate function
-		cdn := os.Getenv("CDN_DOMAIN_PREFIX")
-		url := cdn + *c.Key
-		// append result to slice
-		objects = append(objects, url)
-	}
-
-	return objects
 }
