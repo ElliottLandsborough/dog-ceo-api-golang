@@ -4,17 +4,17 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 
-	awsUtil "../../libraries/aws"
-	breedUtil "../../libraries/breed"
-	lambdaResponseUtil "../../libraries/response"
+	aws "github.com/ElliottLandsborough/dog-ceo-api-golang/app/libraries/aws"
+	breedUtil "github.com/ElliottLandsborough/dog-ceo-api-golang/app/libraries/breed"
+	response "github.com/ElliottLandsborough/dog-ceo-api-golang/app/libraries/response"
 )
 
 func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	rootPrefixes := awsUtil.GetRootPrefixes()
+	rootPrefixes := aws.GetRootPrefixes()
 	breed := breedUtil.GetRandomItemFromSliceString(rootPrefixes)
-	images := awsUtil.GetObjectsByPrefix(breed)
+	images := aws.GetObjectsByPrefix(breed)
 	result := breedUtil.ListBreedImageRandom(images)
-	return lambdaResponseUtil.ImageResponseOneDimensional(result), nil
+	return response.ImageResponseOneDimensional(result), nil
 }
 
 func main() {

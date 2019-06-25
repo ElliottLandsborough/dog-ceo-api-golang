@@ -4,9 +4,9 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 
-	awsUtil "../../libraries/aws"
-	breedUtil "../../libraries/breed"
-	lambdaResponseUtil "../../libraries/response"
+	aws "github.com/ElliottLandsborough/dog-ceo-api-golang/app/libraries/aws"
+	breedUtil "github.com/ElliottLandsborough/dog-ceo-api-golang/app/libraries/breed"
+	response "github.com/ElliottLandsborough/dog-ceo-api-golang/app/libraries/response"
 )
 
 func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
@@ -17,16 +17,16 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	breed := masterBreed + "-" + subBreed
 
 	key := breedUtil.GenerateBreedYamlKey(breed)
-	object, err := awsUtil.GetObject(key)
+	object, err := aws.GetObject(key)
 
 	if err != nil {
-		return lambdaResponseUtil.KeyNotFoundErrorResponse(), nil
+		return response.KeyNotFoundErrorResponse(), nil
 	}
 
-	yaml := awsUtil.GetObjectContents(object)
+	yaml := aws.GetObjectContents(object)
 	json := breedUtil.ParseYamlToJSON(yaml)
 
-	return lambdaResponseUtil.InfoResponseFromString(json), nil
+	return response.InfoResponseFromString(json), nil
 }
 
 func main() {
