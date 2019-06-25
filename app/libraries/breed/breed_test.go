@@ -55,14 +55,20 @@ func TestStringSlicesAreEqual(t *testing.T) {
 	s1 := []string{"string1", "string2", "string3", "string4", "string5"}
 	s2 := []string{"string1", "string2", "string3", "string4", "string5"}
 	s3 := []string{"string1"}
+	s4 := []string{"1", "2", "3", "4", "5"}
 	one := stringSlicesAreEqual(s1, s2)
 	two := stringSlicesAreEqual(s1, s3)
+	three := stringSlicesAreEqual(s1, s4)
 
 	if one == false {
 		t.Errorf("Incorrect, got: %s, want: %s.", "false", "true")
 	}
 
 	if two == true {
+		t.Errorf("Incorrect, got: %s, want: %s.", "true", "false")
+	}
+
+	if three == true {
 		t.Errorf("Incorrect, got: %s, want: %s.", "true", "false")
 	}
 }
@@ -80,6 +86,11 @@ func TestGetMultipleRandomItemsFromSliceString(t *testing.T) {
 	result := len(getMultipleRandomItemsFromSliceString(s, 2))
 	if result != 2 {
 		t.Errorf("Incorrect, got: %d, want: %d.", result, 2)
+	}
+
+	result2 := len(getMultipleRandomItemsFromSliceString(s, 9999))
+	if result2 != 5 {
+		t.Errorf("Incorrect, got: %d, want: %d.", result, 5)
 	}
 }
 
@@ -99,6 +110,13 @@ func TestListAnyBreedMultiImageRandom(t *testing.T) {
 	if stringSlicesAreEqual(result, expected) == false {
 		t.Errorf("Incorrect, got: %s, want: %s.", "false", "true")
 	}
+
+	// biggest 64bit integer is 9223372036854775807 (add 1 to get 9223372036854775808)
+	result2 := ListAnyBreedMultiImageRandom(images, "9223372036854775808")
+
+	if len(result2) != 1 {
+		t.Errorf("Incorrect, got: %d, want: %d.", len(result2), 1)
+	}
 }
 
 func TestGenerateBreedYamlKey(t *testing.T) {
@@ -117,5 +135,12 @@ func TestParseYamlToJSON(t *testing.T) {
 	expected := `{"item":[{"subkey1":"string1"},{"subkey2":"string2"}]}`
 	if result != expected {
 		t.Errorf("Incorrect, got: %s, want: %s.", result, expected)
+	}
+
+	invalidYAML := "!&^%#-"
+	result2 := ParseYamlToJSON(invalidYAML)
+	expected2 := "{\"error\":\"yaml: did not find expected whitespace or line break\"}"
+	if result2 != expected2 {
+		t.Errorf("Incorrect, got: %s, want: %s.", result2, expected2)
 	}
 }
