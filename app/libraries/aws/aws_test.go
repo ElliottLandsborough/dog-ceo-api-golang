@@ -85,3 +85,27 @@ func TestGetObjectContents(t *testing.T) {
 
 	assert.Equal(t, expected, got)
 }
+
+func TestPrefixesToSlice(t *testing.T) {
+	bucketName := "testBucket"
+	Prefix1 := "Prefix1"
+	Prefix2 := "Prefix2"
+
+	output := &s3.ListObjectsV2Output{
+		Name: &bucketName,
+		CommonPrefixes: []*s3.CommonPrefix{
+			{
+				Prefix: &Prefix1,
+			},
+			{
+				Prefix: &Prefix2,
+			},
+		},
+	}
+
+	got := PrefixesToSlice(output)
+
+	expected := []string{Prefix1, Prefix2}
+
+	assert.Equal(t, got, expected)
+}
