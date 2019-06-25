@@ -3,6 +3,8 @@ package lib
 import (
 	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestSliceContainsString(t *testing.T) {
@@ -154,4 +156,14 @@ func TestPrependStringToAllSliceStrings(t *testing.T) {
 	if stringSlicesAreEqual(expected, got) == false {
 		t.Errorf("Incorrect, got: %s, want: %s.", got, expected)
 	}
+}
+
+func TestGetBreedFromPathParams(t *testing.T) {
+	params1 := map[string]string{"breed1": "spaniel", "breed2": "cocker"}
+	params2 := map[string]string{"breed1": "spaniel"}
+	result1 := GetBreedFromPathParams(params1)
+	result2 := GetBreedFromPathParams(params2)
+
+	assert.Equal(t, result1, "spaniel-cocker")
+	assert.Equal(t, result2, "spaniel")
 }
