@@ -16,7 +16,7 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	svc, _ := aws.S3svc(region)
 	bucket := os.Getenv("IMAGE_BUCKET_NAME")
 
-	slice := aws.GetObjectsByDelimeterAndPrefix(svc, bucket, "/", "")
+	slice := aws.PrefixesToSlice(aws.GetObjectsByDelimeterAndPrefix(svc, bucket, "/", ""))
 	result := breed.ListAllBreeds(slice)
 
 	return response.BreedResponseTwoDimensional(result), nil

@@ -108,3 +108,25 @@ func TestPrefixesToSlice(t *testing.T) {
 
 	assert.Equal(t, got, expected)
 }
+
+func TestObjectsToSlice(t *testing.T) {
+	bucketName := "testBucket"
+	expectedKey1 := "Object1"
+	expectedKey2 := "Object2"
+
+	output := &s3.ListObjectsV2Output{
+		Name: &bucketName,
+		Contents: []*s3.Object{
+			{
+				Key: &expectedKey1,
+			},
+			{
+				Key: &expectedKey2,
+			},
+		},
+	}
+
+	expected := []string{expectedKey1, expectedKey2}
+
+	assert.Equal(t, expected, ObjectsToSlice(output))
+}

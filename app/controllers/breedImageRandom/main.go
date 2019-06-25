@@ -18,7 +18,7 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	breed := breedUtil.GetBreedFromPathParams(request.PathParameters)
 
-	images := breedUtil.PrependStringToAllSliceStrings(aws.GetObjectsByDelimeterAndPrefix(svc, bucket, "", breed), os.Getenv("CDN_DOMAIN_PREFIX"))
+	images := breedUtil.PrependStringToAllSliceStrings(aws.ObjectsToSlice(aws.GetObjectsByDelimeterAndPrefix(svc, bucket, "", breed)), os.Getenv("CDN_DOMAIN_PREFIX"))
 	result := breedUtil.ListBreedImageRandom(images)
 
 	return response.ImageResponseOneDimensional(result), nil
