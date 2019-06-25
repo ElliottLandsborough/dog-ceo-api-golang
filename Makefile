@@ -17,14 +17,7 @@ compile:
 	GOOS=linux GOARCH=amd64 go build -o bin/subBreedInfo ./app/controllers/subBreedInfo
 
 deps:
-	go get -u github.com/aws/aws-lambda-go/events
-	go get -u github.com/aws/aws-sdk-go/aws
-	go get -u github.com/aws/aws-sdk-go/aws/awserr
-	go get -u github.com/aws/aws-sdk-go/aws/session
-	go get -u github.com/aws/aws-sdk-go/service/s3
-	go get github.com/ghodss/yaml
-	go get -u github.com/aws/aws-lambda-go/events
-	go get -u github.com/aws/aws-lambda-go/lambda
+	go get ./...
 
 test:
 	go test -v ./... -race -coverprofile=coverage.txt -covermode=atomic

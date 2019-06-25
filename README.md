@@ -10,6 +10,8 @@ Old version in node: https://github.com/ElliottLandsborough/dog-ceo-api-node
 ## Quick start
 
 ```shell
+go get -u github.com/ElliottLandsborough/dog-ceo-api-golang
+cd $GOPATH/src/github.com/ElliottLandsborough/dog-ceo-api-golang
 make deps
 make clean
 make build
@@ -27,14 +29,7 @@ make start
 ### Dependencies
 
 ```shell
-go get -u github.com/aws/aws-lambda-go/events
-go get -u github.com/aws/aws-sdk-go/aws
-go get -u github.com/aws/aws-sdk-go/aws/awserr
-go get -u github.com/aws/aws-sdk-go/aws/session
-go get -u github.com/aws/aws-sdk-go/service/s3
-go get -u github.com/ghodss/yaml
-go get -u github.com/aws/aws-lambda-go/events
-go get -u github.com/aws/aws-lambda-go/lambda
+go get ./...
 ```
 
 ### Compiling
