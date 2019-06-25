@@ -121,6 +121,23 @@ func TestInfoResponseFromString(t *testing.T) {
 	if expectedJSON != result.Body {
 		t.Errorf("Incorrect, got: %s, want: %s.", result.Body, expectedJSON)
 	}
+
+	someBadJSON := `%$£`
+	result2 := InfoResponseFromString(someBadJSON)
+
+	if result2.StatusCode != 500 {
+		t.Errorf("Incorrect, got: %d, want: %d.", result2.StatusCode, 500)
+	}
+
+	if reflect.DeepEqual(expectedHeaders, result2.Headers) != true {
+		t.Errorf("Incorrect, got: %s, want: %s.", result2.Headers, expectedHeaders)
+	}
+
+	expectedJSON2 := `{"message":"data is badly formatted","status":"error"}`
+
+	if expectedJSON2 != result2.Body {
+		t.Errorf("Incorrect, got: %s, want: %s.", result2.Body, expectedJSON2)
+	}
 }
 
 func TestKeyNotFoundErrorResponse(t *testing.T) {
