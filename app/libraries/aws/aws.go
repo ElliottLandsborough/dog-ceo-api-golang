@@ -7,10 +7,11 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go/service/s3/s3iface"
 )
 
 // S3svc
-func S3svc(region string) (*s3.S3, error) {
+func S3svc(region string) (s3iface.S3API, error) {
 	sess, err := session.NewSession(&aws.Config{
 		Region: aws.String(region)},
 	)
@@ -78,7 +79,7 @@ func ObjectsToSlice(response *s3.ListObjectsV2Output) []string {
 }
 
 // GetObjectsByDelimeterAndPrefix gets objects from s3 which start with string
-func GetObjectsByDelimeterAndPrefix(svc *s3.S3, bucket string, delimeter string, prefix string) *s3.ListObjectsV2Output {
+func GetObjectsByDelimeterAndPrefix(svc s3iface.S3API, bucket string, delimeter string, prefix string) *s3.ListObjectsV2Output {
 	input := ObjectsV2InputGen(bucket, delimeter, prefix)
 	objects, _ := svc.ListObjectsV2(input)
 

@@ -130,3 +130,12 @@ func TestObjectsToSlice(t *testing.T) {
 
 	assert.Equal(t, expected, ObjectsToSlice(output))
 }
+
+func TestGetObjectsByDelimeterAndPrefix(t *testing.T) {
+	svc1, _ := S3svc("eu-west-1")
+	result1 := GetObjectsByDelimeterAndPrefix(svc1, "nonexistantbucket", "", "file.txt")
+	output1 := &s3.ListObjectsV2Output{}
+	assert.Equal(t, output1, result1)
+
+	// todo: a proper test here with a properly mocked 'svc'
+}
