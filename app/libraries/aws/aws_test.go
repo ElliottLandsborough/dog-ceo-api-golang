@@ -1,71 +1,87 @@
 package lib
 
 import (
+	"bytes"
 	"fmt"
+	"io/ioutil"
+	"net/http"
+	"net/http/httptest"
+	"reflect"
 	"testing"
 
-	"github.com/ElliottLandsborough/dog-ceo-api-golang/app/mocks/s3"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3iface"
+	"github.com/stretchr/testify/assert"
 )
 
-type S3API s3iface.S3API
-
-type NotFoundError struct {
-	bucket *string
-	path   *string
+type ObjectStore struct {
+	Client s3iface.S3API
+	URL    string
 }
 
-func (e *NotFoundError) Error() string {
-	return fmt.Sprintf("Not Found %v %v", *e.bucket, *e.path)
+func (svc ObjectStore) GetObject(in *s3.GetObjectInput) (*s3.GetObjectOutput, error) {
+
+	return svc.Client.GetObject(in)
 }
 
-// Strp return a string pointer from string
-func Strp(s string) *string {
-	return &s
+type mockGetObject struct {
+	s3iface.S3API
+	Resp s3.GetObjectOutput
 }
 
-func TestGetObject(t *testing.T) {
-	/*
-		svc := &s3.MockS3Client{}
-		result, err := GetObject(svc, "bucket", "/path")
-	*/
+func (m mockGetObject) GetObject(in *s3.GetObjectInput) (*s3.GetObjectOutput, error) {
+	return &m.Resp, nil
 }
 
-// Get downloads content from S3
-func Get(s3c S3API, bucket *string, path *string) (*s3.GetObjectOutput, error) {
-	/*
-		input := &s3.GetObjectInput{
-			Bucket: aws.String(*bucket),
-			Key:    aws.String(*path),
-		}
-		//body, err := s3c.GetObject(s3c, bucket, path)
-		body, err := s3c.GetObject(input)
-		fmt.Println(body)
-		//return body, err
-		return body, err
-	*/
+func TestS3svc(t *testing.T) {
+	svc, _ := S3svc("fsdfsadfas")
 
-	return nil, nil
+	expected := "*s3.S3"
+	got := reflect.TypeOf(svc).String()
+
+	assert.Equal(t, expected, got)
 }
 
-func Test_Get_Success(t *testing.T) {
-	/*
-		s3c := &s3.MockS3Client{}
-		_, err := Get(s3c, Strp("bucket"), Strp("/path"))
-		fmt.Println(err)
-		assert.Error(t, err)
-	*/
-	// no idea why this doesn't work...
-	//assert.IsType(t, &NotFoundError{}, err)
-	/*
-		s3c := &mocks.MockS3Client{}
-		_, err := Get(s3c, Strp("bucket"), Strp("/path"))
-		assert.Error(t, err)
-		assert.IsType(t, &NotFoundError{}, err)
+func TestObjectInputGen(t *testing.T) {
+	result := ObjectInputGen("bucket", "key")
 
-		s3c.AddGetObject("/path", "asd", nil)
-		out, err := Get(s3c, Strp("bucket"), Strp("/path"))
-		assert.NoError(t, err)
-		assert.Equal(t, "asd", string(*out))
-	*/
+	assert.Equal(t, reflect.TypeOf(result).String(), "*s3.GetObjectInput")
+}
+
+func TestObjectsV2InputGen(t *testing.T) {
+	result := ObjectsV2InputGen("bucket", "delimeter", "prefix")
+
+	assert.Equal(t, reflect.TypeOf(result).String(), "*s3.ListObjectsV2Input")
+}
+
+func TestGetObjectContents(t *testing.T) {
+	// Create mock receiver
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintln(w, "Hello, client")
+	}))
+	defer ts.Close()
+
+	expected := "hello world"
+
+	r := ioutil.NopCloser(bytes.NewReader([]byte("hello world"))) // r type is io.ReadCloser
+
+	// Replaces NewS3
+	svc := ObjectStore{
+		Client: mockGetObject{Resp: s3.GetObjectOutput{Body: r}},
+		URL:    ts.URL,
+	}
+
+	input := &s3.GetObjectInput{
+		Bucket: aws.String("foo"),
+		Key:    aws.String("bar"),
+	}
+	resp, err := svc.GetObject(input)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	got := GetObjectContents(resp)
+
+	assert.Equal(t, expected, got)
 }
