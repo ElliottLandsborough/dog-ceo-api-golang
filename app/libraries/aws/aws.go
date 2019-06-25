@@ -64,9 +64,24 @@ func PrefixesToSlice(listObjectsV2Output *s3.ListObjectsV2Output) []string {
 	return prefixes
 }
 
+// ObjectsToSlice converts listObjectsV2Output response with prefixes to string slice
+// todo: make this work...
+func ObjectsToSlice(listObjectsV2Output *s3.ListObjectsV2Output) []string {
+	prefixes := []string{}
+
+	// loop through aws result
+	for _, c := range listObjectsV2Output.CommonPrefixes {
+		prefix := strings.TrimRight(*c.Prefix, "/")
+		prefixes = append(prefixes, prefix)
+	}
+
+	return prefixes
+}
+
 // GetObjectsByDelimeterAndPrefix gets objects from s3 which start with string
 func GetObjectsByDelimeterAndPrefix(svc *s3.S3, bucket string, delimeter string, prefix string) []string {
 	input := ObjectsV2InputGen(bucket, delimeter, prefix)
 	objects, _ := svc.ListObjectsV2(input)
+	// todo: this sometimes returns prefixes, sometimes returns objects
 	return PrefixesToSlice(objects)
 }
