@@ -1,6 +1,8 @@
 package main
 
 import (
+	"os"
+
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 
@@ -10,8 +12,13 @@ import (
 )
 
 func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	slice := aws.GetRootPrefixes()
+	region := os.Getenv("BUCKET_REGION")
+	svc, _ := aws.S3svc(region)
+	bucket := os.Getenv("IMAGE_BUCKET_NAME")
+
+	slice := aws.GetRootPrefixes(svc, bucket)
 	result := breed.ListAllBreeds(slice)
+
 	return response.BreedResponseTwoDimensional(result), nil
 }
 

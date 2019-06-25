@@ -71,7 +71,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: bin/
-      Handler: masterBreedImages
+      Handler: breedImages
       Runtime: go1.x
       Role: arn:aws:iam::633322954385:role/dog-ceo-api-golang-dev-sam
       Events:
@@ -90,7 +90,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: bin/
-      Handler: subBreedImages
+      Handler: breedImages
       Runtime: go1.x
       Role: arn:aws:iam::633322954385:role/dog-ceo-api-golang-dev-sam
       Events:
@@ -109,7 +109,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: bin/
-      Handler: masterBreedImageRandom
+      Handler: breedImageRandom
       Runtime: go1.x
       Role: arn:aws:iam::633322954385:role/dog-ceo-api-golang-dev-sam
       Events:
@@ -128,7 +128,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: bin/
-      Handler: subBreedImageRandom
+      Handler: breedImageRandom
       Runtime: go1.x
       Role: arn:aws:iam::633322954385:role/dog-ceo-api-golang-dev-sam
       Events:
@@ -147,7 +147,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: bin/
-      Handler: anyBreedImageRandom
+      Handler: anyBreedMultiImageRandom
       Runtime: go1.x
       Role: arn:aws:iam::633322954385:role/dog-ceo-api-golang-dev-sam
       Events:
@@ -185,7 +185,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: bin/
-      Handler: masterBreedInfo
+      Handler: breedInfo
       Runtime: go1.x
       Role: arn:aws:iam::633322954385:role/dog-ceo-api-golang-dev-sam
       Events:
@@ -204,7 +204,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: bin/
-      Handler: subBreedInfo
+      Handler: breedInfo
       Runtime: go1.x
       Role: arn:aws:iam::633322954385:role/dog-ceo-api-golang-dev-sam
       Events:

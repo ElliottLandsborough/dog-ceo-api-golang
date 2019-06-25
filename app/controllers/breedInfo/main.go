@@ -1,6 +1,8 @@
 package main
 
 import (
+	"os"
+
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 
@@ -10,14 +12,37 @@ import (
 )
 
 func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	// the breed from the {breed1} section of url
-	masterBreed := request.PathParameters["breed1"]
-	// the breed from the {breed2} section of url
-	subBreed := request.PathParameters["breed2"]
-	breed := masterBreed + "-" + subBreed
+	region := os.Getenv("BUCKET_REGION")
+	svc, _ := aws.S3svc(region)
+	bucket := os.Getenv("FILE_BUCKET_NAME")
+
+	breed := breedUtil.GetBreedFromPathParams(request.PathParameters)
 
 	key := breedUtil.GenerateBreedYamlKey(breed)
-	object, err := aws.GetObject(key)
+
+	input := aws.ObjectInputGen(bucket, key)
+
+	object, err := svc.GetObject(input)
+
+	/*
+		// handle the error...
+		if err != nil {
+			if aerr, ok := err.(awserr.Error); ok {
+				switch aerr.Code() {
+				case s3.ErrCodeNoSuchBucket:
+					fmt.Println(aerr.Error())
+					os.Exit(1)
+				case s3.ErrCodeNoSuchKey:
+					fmt.Println(aerr.Error())
+					return nil, aerr
+				default:
+					fmt.Println(aerr.Error())
+				}
+			} else {
+				fmt.Println(err.Error())
+			}
+		}
+	*/
 
 	if err != nil {
 		return response.KeyNotFoundErrorResponse(), nil

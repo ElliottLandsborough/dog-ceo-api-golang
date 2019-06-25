@@ -1,6 +1,8 @@
 package main
 
 import (
+	"os"
+
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 
@@ -10,11 +12,13 @@ import (
 )
 
 func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	// get all breeds from s3
-	breeds := aws.GetRootPrefixes()
+	region := os.Getenv("BUCKET_REGION")
+	svc, _ := aws.S3svc(region)
+	bucket := os.Getenv("IMAGE_BUCKET_NAME")
 
-	// the breed from the {breed} section of url
-	breed := request.PathParameters["breed1"]
+	breeds := aws.GetRootPrefixes(svc, bucket)
+
+	breed := breedUtil.GetBreedFromPathParams(request.PathParameters)
 
 	result := breedUtil.ListSubBreeds(breed, breeds)
 
