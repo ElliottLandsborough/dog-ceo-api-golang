@@ -16,6 +16,7 @@ deps:
 	go get ./...
 
 test:
+	go get github.com/stretchr/testify/assert
 	go test -v ./... -race -coverprofile=coverage.txt -covermode=atomic
 
 clean:
