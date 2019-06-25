@@ -139,7 +139,7 @@ func TestParseYamlToJSON(t *testing.T) {
 
 	invalidYAML := "!&^%#-"
 	result2 := ParseYamlToJSON(invalidYAML)
-	expected2 := "{\"error\":\"yaml: did not find expected whitespace or line break\"}"
+	expected2 := `{"error":"yaml: did not find expected whitespace or line break"}`
 	if result2 != expected2 {
 		t.Errorf("Incorrect, got: %s, want: %s.", result2, expected2)
 	}
