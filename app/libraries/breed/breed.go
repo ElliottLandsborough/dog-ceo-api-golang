@@ -1,7 +1,7 @@
 package lib
 
 import (
-	"fmt"
+	"encoding/json"
 	"math/rand"
 	"strconv"
 	"strings"
@@ -180,8 +180,11 @@ func ParseYamlToJSON(yamlString string) string {
 
 	data, err := yaml.YAMLToJSON([]byte(yamlString))
 	if err != nil {
-		fmt.Printf("err: %v\n", err)
-		return "error"
+		errorMap := map[string]string{
+			"error": err.Error(),
+		}
+		errorJSON, _ := json.Marshal(errorMap)
+		return string(errorJSON)
 	}
 
 	return string(data)
