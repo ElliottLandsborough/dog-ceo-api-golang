@@ -99,3 +99,48 @@ func TestImageResponseOneDimensional(t *testing.T) {
 		t.Errorf("Incorrect, got: %s, want: %s.", result.Body, expectedJSON)
 	}
 }
+
+func TestInfoResponseFromString(t *testing.T) {
+	someJSON := `{"message":["string1","string2","string3","string4","string5"],"status":"success"}`
+	result := InfoResponseFromString(someJSON)
+
+	if result.StatusCode != 200 {
+		t.Errorf("Incorrect, got: %d, want: %d.", result.StatusCode, 200)
+	}
+
+	expectedHeaders := map[string]string{
+		"Content-Type": "application/json",
+	}
+
+	if reflect.DeepEqual(expectedHeaders, result.Headers) != true {
+		t.Errorf("Incorrect, got: %s, want: %s.", result.Headers, expectedHeaders)
+	}
+
+	expectedJSON := `{"message":{"message":["string1","string2","string3","string4","string5"],"status":"success"},"status":"success"}`
+
+	if expectedJSON != result.Body {
+		t.Errorf("Incorrect, got: %s, want: %s.", result.Body, expectedJSON)
+	}
+}
+
+func TestKeyNotFoundErrorResponse(t *testing.T) {
+	result := KeyNotFoundErrorResponse()
+
+	if result.StatusCode != 404 {
+		t.Errorf("Incorrect, got: %d, want: %d.", result.StatusCode, 404)
+	}
+
+	expectedHeaders := map[string]string{
+		"Content-Type": "application/json",
+	}
+
+	if reflect.DeepEqual(expectedHeaders, result.Headers) != true {
+		t.Errorf("Incorrect, got: %s, want: %s.", result.Headers, expectedHeaders)
+	}
+
+	expectedJSON := `{"message":"Breed not found.","status":"error"}`
+
+	if expectedJSON != result.Body {
+		t.Errorf("Incorrect, got: %s, want: %s.", result.Body, expectedJSON)
+	}
+}
