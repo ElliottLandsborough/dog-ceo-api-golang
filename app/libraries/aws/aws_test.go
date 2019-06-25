@@ -9,7 +9,6 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3iface"
 	"github.com/stretchr/testify/assert"
@@ -64,19 +63,19 @@ func TestGetObjectContents(t *testing.T) {
 
 	expected := "hello world"
 
-	r := ioutil.NopCloser(bytes.NewReader([]byte("hello world"))) // r type is io.ReadCloser
+	// r type is io.ReadCloser
+	r := ioutil.NopCloser(bytes.NewReader([]byte(expected)))
 
-	// Replaces NewS3
+	// mock svc
 	svc := ObjectStore{
 		Client: mockGetObject{Resp: s3.GetObjectOutput{Body: r}},
 		URL:    ts.URL,
 	}
 
-	input := &s3.GetObjectInput{
-		Bucket: aws.String("foo"),
-		Key:    aws.String("bar"),
-	}
+	input := ObjectInputGen("foo", "bar")
+
 	resp, err := svc.GetObject(input)
+
 	if err != nil {
 		t.Fatal(err)
 	}
