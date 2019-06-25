@@ -66,7 +66,7 @@ func PrefixesToSlice(listObjectsV2Output *s3.ListObjectsV2Output) []string {
 
 // GetObjectsByDelimeterAndPrefix gets objects from s3 which start with string
 func GetObjectsByDelimeterAndPrefix(svc *s3.S3, bucket string, delimeter string, prefix string) []string {
-	input := ObjectsV2InputGen(bucket, "", prefix)
+	input := ObjectsV2InputGen(bucket, delimeter, prefix)
 	objects, _ := svc.ListObjectsV2(input)
 	return PrefixesToSlice(objects)
 }
