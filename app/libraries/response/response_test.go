@@ -1,10 +1,10 @@
 package lib
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/aws/aws-lambda-go/events"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestJsonResponse(t *testing.T) {
@@ -19,32 +19,24 @@ func TestJsonResponse(t *testing.T) {
 		StatusCode: statusCode,
 	}
 
-	if reflect.DeepEqual(response, wanted) != true {
-		t.Errorf("Incorrect, got: %T, want: %T.", response, wanted)
-	}
+	assert.Equal(t, wanted, response)
 }
 
 func TestBreedResponseOneDimensional(t *testing.T) {
 	s := []string{"string1", "string2", "string3", "string4", "string5"}
 	result := BreedResponseOneDimensional(s)
 
-	if result.StatusCode != 200 {
-		t.Errorf("Incorrect, got: %d, want: %d.", result.StatusCode, 200)
-	}
+	assert.Equal(t, 200, result.StatusCode)
 
 	expectedHeaders := map[string]string{
 		"Content-Type": "application/json",
 	}
 
-	if reflect.DeepEqual(expectedHeaders, result.Headers) != true {
-		t.Errorf("Incorrect, got: %s, want: %s.", result.Headers, expectedHeaders)
-	}
+	assert.Equal(t, expectedHeaders, result.Headers)
 
 	expectedJSON := `{"message":["string1","string2","string3","string4","string5"],"status":"success"}`
 
-	if expectedJSON != result.Body {
-		t.Errorf("Incorrect, got: %s, want: %s.", result.Body, expectedJSON)
-	}
+	assert.Equal(t, expectedJSON, result.Body)
 }
 
 func TestBreedResponseTwoDimensional(t *testing.T) {
@@ -58,106 +50,76 @@ func TestBreedResponseTwoDimensional(t *testing.T) {
 
 	result := BreedResponseTwoDimensional(s)
 
-	if result.StatusCode != 200 {
-		t.Errorf("Incorrect, got: %d, want: %d.", result.StatusCode, 200)
-	}
+	assert.Equal(t, 200, result.StatusCode)
 
 	expectedHeaders := map[string]string{
 		"Content-Type": "application/json",
 	}
 
-	if reflect.DeepEqual(expectedHeaders, result.Headers) != true {
-		t.Errorf("Incorrect, got: %s, want: %s.", result.Headers, expectedHeaders)
-	}
+	assert.Equal(t, expectedHeaders, result.Headers)
 
 	expectedJSON := `{"message":{"breed1":["subbreed1","subbreed2"],"breed2":[]},"status":"success"}`
 
-	if expectedJSON != result.Body {
-		t.Errorf("Incorrect, got: %s, want: %s.", result.Body, expectedJSON)
-	}
+	assert.Equal(t, expectedJSON, result.Body)
 }
 
 func TestImageResponseOneDimensional(t *testing.T) {
 	s := []string{"string1", "string2", "string3", "string4", "string5"}
 	result := ImageResponseOneDimensional(s)
 
-	if result.StatusCode != 200 {
-		t.Errorf("Incorrect, got: %d, want: %d.", result.StatusCode, 200)
-	}
+	assert.Equal(t, 200, result.StatusCode)
 
 	expectedHeaders := map[string]string{
 		"Content-Type": "application/json",
 	}
 
-	if reflect.DeepEqual(expectedHeaders, result.Headers) != true {
-		t.Errorf("Incorrect, got: %s, want: %s.", result.Headers, expectedHeaders)
-	}
+	assert.Equal(t, expectedHeaders, result.Headers)
 
 	expectedJSON := `{"message":["string1","string2","string3","string4","string5"],"status":"success"}`
 
-	if expectedJSON != result.Body {
-		t.Errorf("Incorrect, got: %s, want: %s.", result.Body, expectedJSON)
-	}
+	assert.Equal(t, expectedJSON, result.Body)
 }
 
 func TestInfoResponseFromString(t *testing.T) {
 	someJSON := `{"message":["string1","string2","string3","string4","string5"],"status":"success"}`
 	result := InfoResponseFromString(someJSON)
 
-	if result.StatusCode != 200 {
-		t.Errorf("Incorrect, got: %d, want: %d.", result.StatusCode, 200)
-	}
+	assert.Equal(t, 200, result.StatusCode)
 
 	expectedHeaders := map[string]string{
 		"Content-Type": "application/json",
 	}
 
-	if reflect.DeepEqual(expectedHeaders, result.Headers) != true {
-		t.Errorf("Incorrect, got: %s, want: %s.", result.Headers, expectedHeaders)
-	}
+	assert.Equal(t, expectedHeaders, result.Headers)
 
 	expectedJSON := `{"message":{"message":["string1","string2","string3","string4","string5"],"status":"success"},"status":"success"}`
 
-	if expectedJSON != result.Body {
-		t.Errorf("Incorrect, got: %s, want: %s.", result.Body, expectedJSON)
-	}
+	assert.Equal(t, expectedJSON, result.Body)
 
 	someBadJSON := `%$£`
 	result2 := InfoResponseFromString(someBadJSON)
 
-	if result2.StatusCode != 500 {
-		t.Errorf("Incorrect, got: %d, want: %d.", result2.StatusCode, 500)
-	}
+	assert.Equal(t, 500, result2.StatusCode)
 
-	if reflect.DeepEqual(expectedHeaders, result2.Headers) != true {
-		t.Errorf("Incorrect, got: %s, want: %s.", result2.Headers, expectedHeaders)
-	}
+	assert.Equal(t, expectedHeaders, result2.Headers)
 
 	expectedJSON2 := `{"message":"data is badly formatted","status":"error"}`
 
-	if expectedJSON2 != result2.Body {
-		t.Errorf("Incorrect, got: %s, want: %s.", result2.Body, expectedJSON2)
-	}
+	assert.Equal(t, expectedJSON2, result2.Body)
 }
 
 func TestKeyNotFoundErrorResponse(t *testing.T) {
 	result := KeyNotFoundErrorResponse()
 
-	if result.StatusCode != 404 {
-		t.Errorf("Incorrect, got: %d, want: %d.", result.StatusCode, 404)
-	}
+	assert.Equal(t, 404, result.StatusCode)
 
 	expectedHeaders := map[string]string{
 		"Content-Type": "application/json",
 	}
 
-	if reflect.DeepEqual(expectedHeaders, result.Headers) != true {
-		t.Errorf("Incorrect, got: %s, want: %s.", result.Headers, expectedHeaders)
-	}
+	assert.Equal(t, expectedHeaders, result.Headers)
 
 	expectedJSON := `{"message":"Breed not found.","status":"error"}`
 
-	if expectedJSON != result.Body {
-		t.Errorf("Incorrect, got: %s, want: %s.", result.Body, expectedJSON)
-	}
+	assert.Equal(t, expectedJSON, result.Body)
 }

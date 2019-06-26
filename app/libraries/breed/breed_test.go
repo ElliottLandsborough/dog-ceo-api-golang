@@ -1,7 +1,6 @@
 package lib
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -10,17 +9,15 @@ import (
 func TestSliceContainsString(t *testing.T) {
 	s := []string{"string1", "string2"}
 	result := sliceContainsString(s, "string1")
-	if result == false {
-		t.Errorf("Incorrect, got: %s, want: %s.", "false", "true")
-	}
+
+	assert.Equal(t, true, result)
 }
 
 func TestGetRandomItemFromSliceString(t *testing.T) {
 	s := []string{"string1"}
 	result := GetRandomItemFromSliceString(s)
-	if result != "string1" {
-		t.Errorf("Incorrect, got: %s, want: %s.", result, "string1")
-	}
+
+	assert.Equal(t, "string1", result)
 }
 
 func TestListAllBreeds(t *testing.T) {
@@ -30,27 +27,24 @@ func TestListAllBreeds(t *testing.T) {
 		"affenpinscher": []string{},
 		"spaniel":       []string{"cocker"},
 	}
-	if reflect.DeepEqual(got, expected) != true {
-		t.Errorf("Incorrect, got: %s, want: %s.", got, expected)
-	}
+
+	assert.Equal(t, expected, got)
 }
 
 func TestListMasterBreeds(t *testing.T) {
 	breeds := []string{"affenpinscher", "spaniel", "spaniel-cocker"}
 	got := ListMasterBreeds(breeds)
 	expected := []string{"affenpinscher", "spaniel"}
-	if stringSlicesAreEqual(got, expected) == false {
-		t.Errorf("Incorrect, got: %s, want: %s.", got, expected)
-	}
+
+	assert.Equal(t, expected, got)
 }
 
 func TestListSubBreeds(t *testing.T) {
 	breeds := []string{"affenpinscher", "spaniel", "spaniel-cocker"}
 	got := ListSubBreeds("spaniel", breeds)
 	expected := []string{"cocker"}
-	if stringSlicesAreEqual(got, expected) == false {
-		t.Errorf("Incorrect, got: %s, want: %s.", got, expected)
-	}
+
+	assert.Equal(t, expected, got)
 }
 
 func TestStringSlicesAreEqual(t *testing.T) {
@@ -62,71 +56,49 @@ func TestStringSlicesAreEqual(t *testing.T) {
 	two := stringSlicesAreEqual(s1, s3)
 	three := stringSlicesAreEqual(s1, s4)
 
-	if one == false {
-		t.Errorf("Incorrect, got: %s, want: %s.", "false", "true")
-	}
-
-	if two == true {
-		t.Errorf("Incorrect, got: %s, want: %s.", "true", "false")
-	}
-
-	if three == true {
-		t.Errorf("Incorrect, got: %s, want: %s.", "true", "false")
-	}
+	assert.Equal(t, true, one)
+	assert.Equal(t, false, two)
+	assert.Equal(t, false, three)
 }
 
 func TestShuffleSlice(t *testing.T) {
 	s := []string{"string1", "string2", "string3", "string4", "string5"}
 	result := shuffleSlice(s)
-	if stringSlicesAreEqual(s, result) == false {
-		t.Errorf("Incorrect, got: %s, want: %s.", "true", "false")
-	}
+	assert.Equal(t, s, result)
 }
 
 func TestGetMultipleRandomItemsFromSliceString(t *testing.T) {
 	s := []string{"string1", "string2", "string3", "string4", "string5"}
+
 	result := len(getMultipleRandomItemsFromSliceString(s, 2))
-	if result != 2 {
-		t.Errorf("Incorrect, got: %d, want: %d.", result, 2)
-	}
+	assert.Equal(t, 2, result)
 
 	result2 := len(getMultipleRandomItemsFromSliceString(s, 9999))
-	if result2 != 5 {
-		t.Errorf("Incorrect, got: %d, want: %d.", result, 5)
-	}
+	assert.Equal(t, 5, result2)
 }
 
 func TestListBreedImageRandom(t *testing.T) {
 	images := []string{"image1.jpg"}
 
-	if stringSlicesAreEqual(ListBreedImageRandom(images), images) == false {
-		t.Errorf("Incorrect, got: %s, want: %s.", "false", "true")
-	}
+	assert.Equal(t, images, ListBreedImageRandom(images))
 }
 
 func TestListAnyBreedMultiImageRandom(t *testing.T) {
 	images := []string{"image1.jpg", "image1.jpg", "image1.jpg"}
 	result := ListAnyBreedMultiImageRandom(images, "2")
 	expected := []string{"image1.jpg", "image1.jpg"}
-
-	if stringSlicesAreEqual(result, expected) == false {
-		t.Errorf("Incorrect, got: %s, want: %s.", "false", "true")
-	}
+	assert.Equal(t, expected, result)
 
 	// biggest 64bit integer is 9223372036854775807 (add 1 to get 9223372036854775808)
 	result2 := ListAnyBreedMultiImageRandom(images, "9223372036854775808")
-
-	if len(result2) != 1 {
-		t.Errorf("Incorrect, got: %d, want: %d.", len(result2), 1)
-	}
+	assert.Equal(t, 1, len(result2))
 }
 
 func TestGenerateBreedYamlKey(t *testing.T) {
 	str := GenerateBreedYamlKey("testbreedname")
 	good := "breed-info/testbreedname.yaml"
-	if str != good {
-		t.Errorf("Incorrect, got: %s, want: %s.", str, good)
-	}
+
+	assert.Equal(t, good, str)
 }
 
 func TestParseYamlToJSON(t *testing.T) {
@@ -135,16 +107,14 @@ func TestParseYamlToJSON(t *testing.T) {
   - subkey2: "string2"`
 	result := ParseYamlToJSON(yaml)
 	expected := `{"item":[{"subkey1":"string1"},{"subkey2":"string2"}]}`
-	if result != expected {
-		t.Errorf("Incorrect, got: %s, want: %s.", result, expected)
-	}
+
+	assert.Equal(t, expected, result)
 
 	invalidYAML := "!&^%#-"
 	result2 := ParseYamlToJSON(invalidYAML)
 	expected2 := `{"error":"yaml: did not find expected whitespace or line break"}`
-	if result2 != expected2 {
-		t.Errorf("Incorrect, got: %s, want: %s.", result2, expected2)
-	}
+
+	assert.Equal(t, expected2, result2)
 }
 
 func TestPrependStringToAllSliceStrings(t *testing.T) {
@@ -153,9 +123,7 @@ func TestPrependStringToAllSliceStrings(t *testing.T) {
 	expected := []string{prefix + "image1.jpg", prefix + "image2.jpg"}
 	got := PrependStringToAllSliceStrings(images, prefix)
 
-	if stringSlicesAreEqual(expected, got) == false {
-		t.Errorf("Incorrect, got: %s, want: %s.", got, expected)
-	}
+	assert.Equal(t, expected, got)
 }
 
 func TestGetBreedFromPathParams(t *testing.T) {
