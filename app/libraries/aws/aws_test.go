@@ -45,13 +45,13 @@ func TestS3svc(t *testing.T) {
 func TestObjectInputGen(t *testing.T) {
 	result := ObjectInputGen("bucket", "key")
 
-	assert.Equal(t, reflect.TypeOf(result).String(), "*s3.GetObjectInput")
+	assert.Equal(t, "*s3.GetObjectInput", reflect.TypeOf(result).String())
 }
 
 func TestObjectsV2InputGen(t *testing.T) {
 	result := ObjectsV2InputGen("bucket", "delimeter", "prefix")
 
-	assert.Equal(t, reflect.TypeOf(result).String(), "*s3.ListObjectsV2Input")
+	assert.Equal(t, "*s3.ListObjectsV2Input", reflect.TypeOf(result).String())
 }
 
 func TestGetObjectContents(t *testing.T) {
@@ -106,7 +106,7 @@ func TestPrefixesToSlice(t *testing.T) {
 
 	expected := []string{Prefix1, Prefix2}
 
-	assert.Equal(t, got, expected)
+	assert.Equal(t, expected, got)
 }
 
 func TestObjectsToSlice(t *testing.T) {
