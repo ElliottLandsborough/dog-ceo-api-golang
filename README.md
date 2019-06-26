@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/ElliottLandsborough/dog-ceo-api-golang.svg?branch=master)](https://travis-ci.org/ElliottLandsborough/dog-ceo-api-golang)
 [![codecov](https://codecov.io/gh/ElliottLandsborough/dog-ceo-api-golang/branch/master/graph/badge.svg)](https://codecov.io/gh/ElliottLandsborough/dog-ceo-api-golang)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 The AWS Lambda functions used for the https://dog.ceo api.
 
