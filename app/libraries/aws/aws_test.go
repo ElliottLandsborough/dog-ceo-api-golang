@@ -131,11 +131,43 @@ func TestObjectsToSlice(t *testing.T) {
 	assert.Equal(t, expected, ObjectsToSlice(output))
 }
 
+// Define a mock struct to be used in your unit tests of myFunc.
+type mockS3Client struct {
+	s3iface.S3API
+}
+
+// Example from https://godoc.org/github.com/aws/aws-sdk-go/service/s3/s3iface
+func (m *mockS3Client) ListObjectsV2(input *s3.ListObjectsV2Input) (*s3.ListObjectsV2Output, error) {
+	bucketName := "testBucket"
+	expectedKey1 := "breed-name/image1.jpg"
+	expectedKey2 := "breed-name/image2.jpg"
+
+	// mock response/functionality
+	output := &s3.ListObjectsV2Output{
+		Name: &bucketName,
+		Contents: []*s3.Object{
+			{
+				Key: &expectedKey1,
+			},
+			{
+				Key: &expectedKey2,
+			},
+		},
+	}
+
+	return output, nil
+}
+
 func TestGetObjectsByDelimeterAndPrefix(t *testing.T) {
+	// test bad bucket response
 	svc1, _ := S3svc("eu-west-1")
-	result1 := GetObjectsByDelimeterAndPrefix(svc1, "nonexistantbucket", "", "file.txt")
+	result1 := GetObjectsByDelimeterAndPrefix(svc1, "testBucket", "", "breed-name")
 	output1 := &s3.ListObjectsV2Output{}
 	assert.Equal(t, output1, result1)
 
-	// todo: a proper test here with a properly mocked 'svc'
+	// test good bucket response
+	svc2 := &mockS3Client{}
+	result2 := GetObjectsByDelimeterAndPrefix(svc2, "testBucket", "", "breed-name")
+	slice := ObjectsToSlice(result2)
+	assert.Equal(t, []string{"breed-name/image1.jpg", "breed-name/image2.jpg"}, slice)
 }
