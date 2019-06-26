@@ -4,7 +4,7 @@
 [![codecov](https://codecov.io/gh/ElliottLandsborough/dog-ceo-api-golang/branch/master/graph/badge.svg)](https://codecov.io/gh/ElliottLandsborough/dog-ceo-api-golang)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Go](https://img.shields.io/badge/Go-1.x-success.svg)](https://golang.org/)
-[![AWS Lambda](https://img.shields.io/badge/AWS-Lambda-orange.svg)][https://aws.amazon.com/lambda/]
+[![AWS Lambda](https://img.shields.io/badge/AWS-Lambda-orange.svg)](https://aws.amazon.com/lambda/)
 
 The AWS Lambda functions used for the https://dog.ceo api.
 
