@@ -10,7 +10,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3/s3iface"
 )
 
-// S3svc
+// S3svc returns an s3 service
 func S3svc(region string) (s3iface.S3API, error) {
 	sess, err := session.NewSession(&aws.Config{
 		Region: aws.String(region)},
@@ -21,7 +21,7 @@ func S3svc(region string) (s3iface.S3API, error) {
 	return svc, err
 }
 
-// ObjectInputGen
+// ObjectInputGen generates a GetObjectInput to be input into s3
 func ObjectInputGen(bucket string, key string) *s3.GetObjectInput {
 	input := &s3.GetObjectInput{
 		Bucket: aws.String(bucket),
@@ -31,7 +31,7 @@ func ObjectInputGen(bucket string, key string) *s3.GetObjectInput {
 	return input
 }
 
-// ObjectsV2InputGen
+// ObjectsV2InputGen generates a ListObjectsV2Input to be input into s3
 func ObjectsV2InputGen(bucket string, delimeter string, prefix string) *s3.ListObjectsV2Input {
 	input := &s3.ListObjectsV2Input{
 		Bucket:    aws.String(bucket),
