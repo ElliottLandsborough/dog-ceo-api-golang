@@ -6,9 +6,9 @@
 [![Go](https://img.shields.io/badge/Go-1.x-success.svg)](https://golang.org/)
 [![AWS Lambda](https://img.shields.io/badge/AWS-Lambda-orange.svg)](https://aws.amazon.com/lambda/)
 
-The AWS Lambda functions used for the (dog.ceo api)[https://dog.ceo/api].
+The AWS Lambda functions used for the [dog.ceo api](https://dog.ceo/api).
 
-(Old version in node)[https://github.com/ElliottLandsborough/dog-ceo-api-node].
+[Old version in node](https://github.com/ElliottLandsborough/dog-ceo-api-node).
 
 ## Quick start
 
