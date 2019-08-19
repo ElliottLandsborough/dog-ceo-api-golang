@@ -190,6 +190,7 @@ func ParseYamlToJSON(yamlString string) string {
 	return string(data)
 }
 
+// GetBreedFromPathParams returns a breed string based on breed path params array
 func GetBreedFromPathParams(PathParameters map[string]string) string {
 	// the breed from the {breed1} section of url
 	masterBreed := PathParameters["breed1"]
