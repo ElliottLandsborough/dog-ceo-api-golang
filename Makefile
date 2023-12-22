@@ -13,7 +13,7 @@ compile:
 	GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o bin/subBreeds/bootstrap ./app/controllers/subBreeds
 
 deps:
-	go mod tidy
+	go mod download
 
 test:
 	go test -v ./... -race -coverprofile=coverage.txt -covermode=atomic
