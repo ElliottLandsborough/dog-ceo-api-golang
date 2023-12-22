@@ -4,19 +4,18 @@ ifeq ("$(ENVIRONMENT)","production")
 endif
 
 compile:
-	GOOS=linux GOARCH=amd64 go build -o bin/allBreeds ./app/controllers/allBreeds
-	GOOS=linux GOARCH=amd64 go build -o bin/anyBreedMultiImageRandom ./app/controllers/anyBreedMultiImageRandom
-	GOOS=linux GOARCH=amd64 go build -o bin/breedImageRandom ./app/controllers/breedImageRandom
-	GOOS=linux GOARCH=amd64 go build -o bin/breedImages ./app/controllers/breedImages
-	GOOS=linux GOARCH=amd64 go build -o bin/breedInfo ./app/controllers/breedInfo
-	GOOS=linux GOARCH=amd64 go build -o bin/masterBreeds ./app/controllers/masterBreeds
-	GOOS=linux GOARCH=amd64 go build -o bin/subBreeds ./app/controllers/subBreeds
+	GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o bin/allBreeds/bootstrap ./app/controllers/allBreeds
+	GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o bin/anyBreedMultiImageRandom/bootstrap ./app/controllers/anyBreedMultiImageRandom
+	GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o bin/breedImageRandom/bootstrap ./app/controllers/breedImageRandom
+	GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o bin/breedImages/bootstrap ./app/controllers/breedImages
+	GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o bin/breedInfo/bootstrap ./app/controllers/breedInfo
+	GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o bin/masterBreeds/bootstrap ./app/controllers/masterBreeds
+	GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o bin/subBreeds/bootstrap ./app/controllers/subBreeds
 
 deps:
-	go get ./...
+	go mod tidy
 
 test:
-	go get github.com/stretchr/testify/assert
 	go test -v ./... -race -coverprofile=coverage.txt -covermode=atomic
 
 clean:
@@ -30,7 +29,7 @@ clean:
 
 start:
 	sam local start-api
-	#sam local start-api --env-vars environment_variables.json
+	# sam local start-api --env-vars environment_variables.json
 
 sendtoaws:
 	sam package --output-template-file packaged.yaml --s3-bucket dog-ceo-api-golang-$(ENVSWITCH)-sam

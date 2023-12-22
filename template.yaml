@@ -2,7 +2,7 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
   dog-ceo-api-golang
-  
+
   The golang api for https://dog.ceo
 
 Globals:
@@ -13,8 +13,8 @@ Resources:
   listAllBreeds:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: bin/
-      Handler: allBreeds
+      CodeUri: bin/allBreeds/
+      Handler: bootstrap
       Runtime: provided.al2
       Role: arn:aws:iam::633322954385:role/dog-ceo-api-golang-dev-sam
       Events:
@@ -32,8 +32,8 @@ Resources:
   listMasterBreeds:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: bin/
-      Handler: masterBreeds
+      CodeUri: bin/masterBreeds/
+      Handler: bootstrap
       Runtime: provided.al2
       Role: arn:aws:iam::633322954385:role/dog-ceo-api-golang-dev-sam
       Events:
@@ -51,8 +51,8 @@ Resources:
   listSubBreeds:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: bin/
-      Handler: subBreeds
+      CodeUri: bin/subBreeds/
+      Handler: bootstrap
       Runtime: provided.al2
       Role: arn:aws:iam::633322954385:role/dog-ceo-api-golang-dev-sam
       Events:
@@ -70,8 +70,8 @@ Resources:
   listMasterBreedImages:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: bin/
-      Handler: breedImages
+      CodeUri: bin/breedImages/
+      Handler: bootstrap
       Runtime: provided.al2
       Role: arn:aws:iam::633322954385:role/dog-ceo-api-golang-dev-sam
       Events:
@@ -89,8 +89,8 @@ Resources:
   listSubBreedImages:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: bin/
-      Handler: breedImages
+      CodeUri: bin/breedImages/
+      Handler: bootstrap
       Runtime: provided.al2
       Role: arn:aws:iam::633322954385:role/dog-ceo-api-golang-dev-sam
       Events:
@@ -108,8 +108,8 @@ Resources:
   listMasterBreedImageRandom:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: bin/
-      Handler: breedImageRandom
+      CodeUri: bin/breedImageRandom/
+      Handler: bootstrap
       Runtime: provided.al2
       Role: arn:aws:iam::633322954385:role/dog-ceo-api-golang-dev-sam
       Events:
@@ -127,8 +127,8 @@ Resources:
   listSubBreedImageRandom:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: bin/
-      Handler: breedImageRandom
+      CodeUri: bin/breedImageRandom/
+      Handler: bootstrap
       Runtime: provided.al2
       Role: arn:aws:iam::633322954385:role/dog-ceo-api-golang-dev-sam
       Events:
@@ -146,8 +146,8 @@ Resources:
   listAnyBreedImageRandom:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: bin/
-      Handler: anyBreedMultiImageRandom
+      CodeUri: bin/anyBreedMultiImageRandom/
+      Handler: bootstrap
       Runtime: provided.al2
       Role: arn:aws:iam::633322954385:role/dog-ceo-api-golang-dev-sam
       Events:
@@ -165,8 +165,8 @@ Resources:
   listAnyBreedMultiImageRandom:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: bin/
-      Handler: anyBreedMultiImageRandom
+      CodeUri: bin/anyBreedMultiImageRandom/
+      Handler: bootstrap
       Runtime: provided.al2
       Role: arn:aws:iam::633322954385:role/dog-ceo-api-golang-dev-sam
       Events:
@@ -184,8 +184,8 @@ Resources:
   listMasterBreedInfo:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: bin/
-      Handler: breedInfo
+      CodeUri: bin/breedInfo/
+      Handler: bootstrap
       Runtime: provided.al2
       Role: arn:aws:iam::633322954385:role/dog-ceo-api-golang-dev-sam
       Events:
@@ -203,8 +203,8 @@ Resources:
   listSubBreedInfo:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: bin/
-      Handler: breedInfo
+      CodeUri: bin/breedInfo/
+      Handler: bootstrap
       Runtime: provided.al2
       Role: arn:aws:iam::633322954385:role/dog-ceo-api-golang-dev-sam
       Events:
