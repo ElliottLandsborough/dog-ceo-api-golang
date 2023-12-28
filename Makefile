@@ -38,7 +38,7 @@ sendtoaws:
 # make deploy
 # -- OR --
 # make ENVIRONMENT=production deploy
-deploy: test compile sendtoaws
+deploy: clean test clean compile sendtoaws
 
 build: test compile
 
