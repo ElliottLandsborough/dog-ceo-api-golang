@@ -1,6 +1,6 @@
 # dog.ceo golang lambda functions
 
-[![Build Status](https://travis-ci.org/ElliottLandsborough/dog-ceo-api-golang.svg?branch=master)](https://travis-ci.org/ElliottLandsborough/dog-ceo-api-golang)
+[![CircleCI](https://dl.circleci.com/status-badge/img/circleci/AE794oGvVf6X3TA8Q3K9s/bYUpPd4Cc9ATboVrnJhRf/tree/main.svg?style=svg&circle-token=f466b05680041172041bf3f65dd74246cdbb49d1)](https://dl.circleci.com/status-badge/redirect/circleci/AE794oGvVf6X3TA8Q3K9s/bYUpPd4Cc9ATboVrnJhRf/tree/main)
 [![codecov](https://codecov.io/gh/ElliottLandsborough/dog-ceo-api-golang/branch/master/graph/badge.svg)](https://codecov.io/gh/ElliottLandsborough/dog-ceo-api-golang)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Go](https://img.shields.io/badge/Go-1.x-success.svg)](https://golang.org/)
