@@ -4,13 +4,13 @@ ifeq ("$(ENVIRONMENT)","production")
 endif
 
 compile:
-	GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o bin/allBreeds/bootstrap ./app/controllers/allBreeds
-	GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o bin/anyBreedMultiImageRandom/bootstrap ./app/controllers/anyBreedMultiImageRandom
-	GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o bin/breedImageRandom/bootstrap ./app/controllers/breedImageRandom
-	GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o bin/breedImages/bootstrap ./app/controllers/breedImages
-	GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o bin/breedInfo/bootstrap ./app/controllers/breedInfo
-	GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o bin/masterBreeds/bootstrap ./app/controllers/masterBreeds
-	GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o bin/subBreeds/bootstrap ./app/controllers/subBreeds
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o bin/allBreeds/bootstrap ./app/controllers/allBreeds
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o bin/anyBreedMultiImageRandom/bootstrap ./app/controllers/anyBreedMultiImageRandom
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o bin/breedImageRandom/bootstrap ./app/controllers/breedImageRandom
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o bin/breedImages/bootstrap ./app/controllers/breedImages
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o bin/breedInfo/bootstrap ./app/controllers/breedInfo
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o bin/masterBreeds/bootstrap ./app/controllers/masterBreeds
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -tags lambda.norpc -o bin/subBreeds/bootstrap ./app/controllers/subBreeds
 
 deps:
 	go mod download
