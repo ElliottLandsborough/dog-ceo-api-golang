@@ -5,7 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Go](https://img.shields.io/badge/Go-1.x-success.svg)](https://golang.org/)
 [![AWS Lambda](https://img.shields.io/badge/AWS-Lambda-orange.svg)](https://aws.amazon.com/lambda/)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/40c5e0b1db42449b91e0a4a0f5a0dcdf)](https://www.codacy.com/app/ElliottLandsborough/dog-ceo-api-golang?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ElliottLandsborough/dog-ceo-api-golang&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/40c5e0b1db42449b91e0a4a0f5a0dcdf)](https://app.codacy.com/gh/ElliottLandsborough/dog-ceo-api-golang/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
 The AWS Lambda functions used for the [dog.ceo api](https://dog.ceo/api).
 

@@ -4,6 +4,7 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: Build secrets
 
     steps:
       - uses: actions/checkout@v4
@@ -15,3 +16,7 @@ jobs:
         run: go get ./...
       - name: Run tests
         run: make test
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4-beta
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
