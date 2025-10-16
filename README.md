@@ -50,6 +50,7 @@ make
 
 ```shell
 brew install aws-sam-cli
+brew install awscli
 make build && make start
 ```
 
@@ -57,6 +58,7 @@ make build && make start
 
 ```shell
 brew install aws-sam-cli
+brew install awscli
 make deploy
 -- OR --
 make ENVIRONMENT=production deploy
