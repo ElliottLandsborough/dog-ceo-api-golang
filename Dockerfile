@@ -1,4 +1,4 @@
-FROM public.ecr.aws/docker/library/golang:1.21 as builder
+FROM public.ecr.aws/docker/library/golang:1.25 as builder
 
 ARG BUILD_CONTROLLER
 
