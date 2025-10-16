@@ -1,6 +1,6 @@
 module github.com/ElliottLandsborough/dog-ceo-api-golang
 
-go 1.25
+go 1.25.3
 
 require (
 	github.com/aws/aws-lambda-go v1.50.0
