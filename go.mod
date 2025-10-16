@@ -3,10 +3,10 @@ module github.com/ElliottLandsborough/dog-ceo-api-golang
 go 1.25
 
 require (
-	github.com/aws/aws-lambda-go v1.43.0
-	github.com/aws/aws-sdk-go v1.49.11
+	github.com/aws/aws-lambda-go v1.50.0
+	github.com/aws/aws-sdk-go v1.55.8
 	github.com/ghodss/yaml v1.0.0
-	github.com/stretchr/testify v1.8.4
+	github.com/stretchr/testify v1.11.1
 )
 
 require (
