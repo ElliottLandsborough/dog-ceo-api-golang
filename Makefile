@@ -16,7 +16,7 @@ deps:
 	go mod download
 
 test:
-	go test -v ./... -race -coverprofile=coverage.txt -covermode=atomic
+	GOTOOLCHAIN=go1.25.3+auto go test -v ./... -race -coverprofile=coverage.txt -covermode=atomic
 
 clean:
 	rm -rf ./bin/allBreeds

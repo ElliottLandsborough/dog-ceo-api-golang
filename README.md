@@ -49,12 +49,16 @@ make
 **Invoking function locally through local API Gateway**
 
 ```shell
+brew install aws-sam-cli
+brew install awscli
 make build && make start
 ```
 
 ## Packaging and deployment
 
 ```shell
+brew install aws-sam-cli
+brew install awscli
 make deploy
 -- OR --
 make ENVIRONMENT=production deploy

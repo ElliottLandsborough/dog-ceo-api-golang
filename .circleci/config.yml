@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/repo
     docker:
-      - image: cimg/go:1.21.0
+      - image: cimg/go:1.25.3
     steps:
       - checkout:
           method: blobless
